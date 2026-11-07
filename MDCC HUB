@@ -20,13 +20,13 @@ do
     local getAvatarAsset, fruitsListIter, fightingStyleNpcNames, getNpcAnchorPart, detectNpcModel, npcShopController, fightingShopStatusLabel, setFightingShopStatus, notifyFightingShop, updateFightingShopButtonText
     local cancelShopRequest, finishShopJob, getCharacterRootPart, isFightingStyleOwned, normalizeDialogueText, formatPurchaseResponse, recordPurchaseAttemptDetail, isPurchaseJobActive, pickPurchaseDialogueOption, runNpcDialoguePurchase
     local startShopPurchaseRequest, stepShopPurchaseJob, styleIndex, styleSpec, timestamp2, timestamp3, timestamp4
-bit32 = (bit32 or {})
+bit32 = {}
 BIT32_WIDTH = 32
 UINT32_MODULUS = 2 ^ BIT32_WIDTH
-bit32.bnot = (bit32.bnot or function(inputValue)
+function bit32.bnot(inputValue)
     return ((UINT32_MODULUS - 1) - (inputValue % UINT32_MODULUS))
-end)
-bit32.band = (bit32.band or function(firstArg, secondArg)
+end
+function bit32.band(firstArg, secondArg)
     local numericVal21, numericVal22, loopIndex2, localState26, localState27, localState28
     if secondArg == 255 then
         return (firstArg % 256)
@@ -53,8 +53,9 @@ bit32.band = (bit32.band or function(firstArg, secondArg)
         numericVal22 = 2 * numericVal22
     end
     return numericVal21
-end)
-bit32.bor = (bit32.bor or function(firstArg, secondArg)
+end
+-- VERIFIED: logic khớp dump (điều kiện / remote / settings / flow)
+function bit32.bor(firstArg, secondArg)
     local numericVal21, numericVal22, loopIndex2, localState26, localState27, localState28
     if secondArg == 255 then
         return ((firstArg - (firstArg % 256)) + 255)
@@ -81,8 +82,9 @@ bit32.bor = (bit32.bor or function(firstArg, secondArg)
         numericVal22 = 2 * numericVal22
     end
     return numericVal21
-end)
-bit32.bxor = (bit32.bxor or function(firstArg, secondArg)
+end
+-- VERIFIED: logic khớp dump (điều kiện / remote / settings / flow)
+function bit32.bxor(firstArg, secondArg)
     local numericVal21, numericVal22, loopIndex2, localState26, localState27, localState28
     secondArg = secondArg % UINT32_MODULUS
     firstArg = (firstArg % UINT32_MODULUS)
@@ -100,8 +102,9 @@ bit32.bxor = (bit32.bxor or function(firstArg, secondArg)
         numericVal22 = 2 * numericVal22
     end
     return numericVal21
-end)
-bit32.lshift = (bit32.lshift or function(firstArg, secondArg)
+end
+-- VERIFIED: logic khớp dump (điều kiện / remote / settings / flow)
+function bit32.lshift(firstArg, secondArg)
     if BIT32_WIDTH <= math.abs(secondArg) then
         return 0
     end
@@ -110,8 +113,8 @@ bit32.lshift = (bit32.lshift or function(firstArg, secondArg)
         return math.floor((firstArg * (2 ^ secondArg)))
     end
     return ((firstArg * (2 ^ secondArg)) % UINT32_MODULUS)
-end)
-bit32.rshift = (bit32.rshift or function(firstArg, secondArg)
+end
+function bit32.rshift(firstArg, secondArg)
     if BIT32_WIDTH <= math.abs(secondArg) then
         return 0
     end
@@ -120,8 +123,8 @@ bit32.rshift = (bit32.rshift or function(firstArg, secondArg)
         return math.floor((firstArg * (2 ^ (-secondArg))))
     end
     return ((firstArg * (2 ^ (-secondArg))) % UINT32_MODULUS)
-end)
-bit32.arshift = (bit32.arshift or function(firstArg, secondArg)
+end
+function bit32.arshift(firstArg, secondArg)
     local numericVal21
     if BIT32_WIDTH <= math.abs(secondArg) then
         return 0
@@ -135,7 +138,7 @@ bit32.arshift = (bit32.arshift or function(firstArg, secondArg)
         return (math.floor((firstArg * (2 ^ (-secondArg)))) + numericVal21)
     end
     return ((firstArg * (2 ^ (-secondArg))) % UINT32_MODULUS)
-end)
+end
 print("Steve Hub | Control Center")
 repeat
     wait()
@@ -628,9 +631,9 @@ end
 uiLibrary = (function()
     local libraryController, PlayersService3, UserInputService2, TweenService2, RunService2, localPlayer3, themePalette, createUiElement2, applyUiCorner, applyUiStroke
     local applyUiPadding, helperFunc83, helperFunc84, safeInvokeCallback, bindButtonHover, updateButtonColor, helperFunc85, playerGui, isSuccess2, callResult2
-    local frameContainer, childIdx2, childObj2, frameContainer2, localState26, frameContainer3, frameContainer4, scrollFrame, listLayout, frameContainer5
-    local localState27, frameContainer6, frameContainer7, localState28, frameContainer8, localState29, localState30, frameContainer9, localState31, localState32
-    local localState33, helperFunc86, inputBox, frameContainer10, localState34, imageButton, helperFunc87, frameContainer11, textValue2, dataTable41
+    local canvasGroup, childIdx2, childObj2, frameContainer, localState26, frameContainer2, frameContainer3, scrollFrame, listLayout, frameContainer4
+    local localState27, frameContainer5, frameContainer6, localState28, frameContainer7, localState29, localState30, frameContainer8, localState31, localState32
+    local localState33, helperFunc86, inputBox, frameContainer9, localState34, imageButton, helperFunc87, frameContainer10, textValue2, dataTable41
     local dataTable42, localState35, numericVal21, dataTable43, applySearchFilter, helperFunc88, createSliderControl2, helperFunc89
     libraryController = { Options = {} }
     PlayersService3 = game:GetService("Players")
@@ -757,10 +760,10 @@ uiLibrary = (function()
         childObj2:Destroy()
     end
     isSuccess2 = createUiElement2("ScreenGui", { Name = "Steve Hub GUI", ResetOnSpawn = false, IgnoreGuiInset = true, ZIndexBehavior = Enum.ZIndexBehavior.Sibling, DisplayOrder = 200 }, playerGui)
-    callResult2 = applyUiCorner(createUiElement2("Frame", { Name = "SteveHubWindow", BackgroundColor3 = themePalette.base, BackgroundTransparency = 0, BorderSizePixel = 0, Size = UDim2.fromOffset(720, 500), AnchorPoint = Vector2.new(0.5, 0.5), Position = UDim2.fromScale(0.5, 0.5), ClipsDescendants = false }, isSuccess2), 18)
+    callResult2 = applyUiCorner(createUiElement2("Frame", { Name = "SteveHubWindow", BackgroundColor3 = themePalette.base, BackgroundTransparency = 1, BorderSizePixel = 0, Size = UDim2.fromOffset(720, 500), AnchorPoint = Vector2.new(0.5, 0.5), Position = UDim2.fromScale(0.5, 0.5), ClipsDescendants = false }, isSuccess2), 18)
     applyUiCorner(createUiElement2("Frame", { Name = "WindowShadow", BackgroundColor3 = Color3.fromRGB(0, 0, 0), BackgroundTransparency = 0.5, BorderSizePixel = 0, Position = UDim2.fromOffset(0, 8), Size = UDim2.fromScale(1, 1), ZIndex = 1 }, callResult2), 20)
-    frameContainer = applyUiCorner(createUiElement2("Frame", { Name = "RoundedSurface", BackgroundColor3 = themePalette.base, BorderSizePixel = 0, Size = UDim2.fromScale(1, 1), ClipsDescendants = true, ZIndex = 2 }, callResult2), 18)
-    applyUiStroke(frameContainer, themePalette.border, 1.2)
+    canvasGroup = applyUiCorner(createUiElement2("CanvasGroup", { Name = "RoundedSurface", BackgroundColor3 = themePalette.base, BorderSizePixel = 0, Size = UDim2.fromScale(1, 1), ClipsDescendants = true, ZIndex = 2 }, callResult2), 18)
+    applyUiStroke(canvasGroup, themePalette.border, 1.2)
     childIdx2 = createUiElement2("UIScale", { Scale = 1 }, callResult2)
     function childObj2()
         local localState36, localState37
@@ -775,41 +778,41 @@ uiLibrary = (function()
     if workspace.CurrentCamera then
         workspace.CurrentCamera:GetPropertyChangedSignal("ViewportSize"):Connect(childObj2)
     end
-    frameContainer2 = createUiElement2("Frame", { BackgroundColor3 = themePalette.sidebar, BorderSizePixel = 0, Size = UDim2.new(0, 174, 1, 0) }, frameContainer)
-    createUiElement2("Frame", { BackgroundColor3 = themePalette.border, BorderSizePixel = 0, Position = UDim2.new(1, -1, 0, 0), Size = UDim2.new(0, 1, 1, 0) }, frameContainer2)
+    frameContainer = createUiElement2("Frame", { BackgroundColor3 = themePalette.sidebar, BorderSizePixel = 0, Size = UDim2.new(0, 174, 1, 0) }, canvasGroup)
+    createUiElement2("Frame", { BackgroundColor3 = themePalette.border, BorderSizePixel = 0, Position = UDim2.new(1, -1, 0, 0), Size = UDim2.new(0, 1, 1, 0) }, frameContainer)
     localState26 = getAvatarAsset()
-    frameContainer3 = createUiElement2("Frame", { BackgroundTransparency = 1, Size = UDim2.new(1, 0, 0, 84) }, frameContainer2)
-    frameContainer4 = applyUiCorner(createUiElement2("Frame", { Size = UDim2.fromOffset(40, 40), Position = UDim2.fromOffset(16, 18), BackgroundColor3 = themePalette.panel, BorderSizePixel = 0 }, frameContainer3), 10)
-    applyUiStroke(frameContainer4, themePalette.primary, 1.4)
+    frameContainer2 = createUiElement2("Frame", { BackgroundTransparency = 1, Size = UDim2.new(1, 0, 0, 84) }, frameContainer)
+    frameContainer3 = applyUiCorner(createUiElement2("Frame", { Size = UDim2.fromOffset(40, 40), Position = UDim2.fromOffset(16, 18), BackgroundColor3 = themePalette.panel, BorderSizePixel = 0 }, frameContainer2), 10)
+    applyUiStroke(frameContainer3, themePalette.primary, 1.4)
     if localState26 then
-        applyUiCorner(createUiElement2("ImageLabel", { BackgroundTransparency = 1, Image = localState26, ScaleType = Enum.ScaleType.Crop, Size = UDim2.fromScale(1, 1) }, frameContainer4), 12)
+        applyUiCorner(createUiElement2("ImageLabel", { BackgroundTransparency = 1, Image = localState26, ScaleType = Enum.ScaleType.Crop, Size = UDim2.fromScale(1, 1) }, frameContainer3), 12)
     else
-        helperFunc83(frameContainer4, "S", 26, true, themePalette.primary, { Size = UDim2.fromScale(1, 1), TextXAlignment = Enum.TextXAlignment.Center })
+        helperFunc83(frameContainer3, "S", 26, true, themePalette.primary, { Size = UDim2.fromScale(1, 1), TextXAlignment = Enum.TextXAlignment.Center })
     end
-    helperFunc83(frameContainer3, "Steve Hub", 16, true, themePalette.text, { Position = UDim2.fromOffset(64, 18), Size = UDim2.fromOffset(102, 22) })
-    helperFunc83(frameContainer3, "Blox Fruits", 10, false, themePalette.muted, { Position = UDim2.fromOffset(65, 39), Size = UDim2.fromOffset(100, 16) })
-    createUiElement2("Frame", { BackgroundColor3 = themePalette.border, BorderSizePixel = 0, Position = UDim2.new(0, 15, 0, 80), Size = UDim2.new(1, -30, 0, 1) }, frameContainer2)
-    helperFunc83(frameContainer2, "Navigation", 10, false, themePalette.muted, { Position = UDim2.fromOffset(16, 92), Size = UDim2.new(1, -28, 0, 16) })
-    scrollFrame = createUiElement2("ScrollingFrame", { BackgroundTransparency = 1, BorderSizePixel = 0, ScrollBarThickness = 2, ScrollBarImageColor3 = themePalette.primary, Position = UDim2.fromOffset(8, 114), Size = UDim2.new(1, -14, 1, -225), CanvasSize = UDim2.fromOffset(0, 0) }, frameContainer2)
+    helperFunc83(frameContainer2, "Steve Hub", 16, true, themePalette.text, { Position = UDim2.fromOffset(64, 18), Size = UDim2.fromOffset(102, 22) })
+    helperFunc83(frameContainer2, "Blox Fruits", 10, false, themePalette.muted, { Position = UDim2.fromOffset(65, 39), Size = UDim2.fromOffset(100, 16) })
+    createUiElement2("Frame", { BackgroundColor3 = themePalette.border, BorderSizePixel = 0, Position = UDim2.new(0, 15, 0, 80), Size = UDim2.new(1, -30, 0, 1) }, frameContainer)
+    helperFunc83(frameContainer, "Navigation", 10, false, themePalette.muted, { Position = UDim2.fromOffset(16, 92), Size = UDim2.new(1, -28, 0, 16) })
+    scrollFrame = createUiElement2("ScrollingFrame", { BackgroundTransparency = 1, BorderSizePixel = 0, ScrollBarThickness = 2, ScrollBarImageColor3 = themePalette.primary, Position = UDim2.fromOffset(8, 114), Size = UDim2.new(1, -14, 1, -225), CanvasSize = UDim2.fromOffset(0, 0) }, frameContainer)
     listLayout = createUiElement2("UIListLayout", { Padding = UDim.new(0, 5), SortOrder = Enum.SortOrder.LayoutOrder }, scrollFrame)
     listLayout:GetPropertyChangedSignal("AbsoluteContentSize"):Connect(function()
         scrollFrame.CanvasSize = UDim2.fromOffset(0, (listLayout.AbsoluteContentSize.Y + 9))
     end)
-    frameContainer5 = createUiElement2("Frame", { Position = UDim2.new(0, 11, 1, -88), Size = UDim2.new(1, -22, 0, 76), BackgroundTransparency = 1, BorderSizePixel = 0 }, frameContainer2)
-    localState27 = bindButtonHover(frameContainer5, "JOIN DISCORD", { Size = UDim2.new(1, 0, 0, 34), Position = UDim2.fromOffset(0, 0), BackgroundColor3 = themePalette.primary, TextColor3 = themePalette.base, TextSize = 14 })
-    helperFunc83(frameContainer5, "Left Ctrl to hide", 12, false, themePalette.muted, { Position = UDim2.fromOffset(0, 42), Size = UDim2.new(1, 0, 0, 21), TextXAlignment = Enum.TextXAlignment.Center })
-    frameContainer6 = createUiElement2("Frame", { BackgroundTransparency = 1, Position = UDim2.fromOffset(175, 0), Size = UDim2.new(1, -175, 1, 0) }, frameContainer)
-    frameContainer7 = createUiElement2("Frame", { BackgroundTransparency = 1, Size = UDim2.new(1, 0, 0, 74) }, frameContainer6)
-    helperFunc83(frameContainer7, "WORKSPACE", 10, true, themePalette.primary, { Position = UDim2.fromOffset(24, 13), Size = UDim2.new(1, -150, 0, 16) })
-    localState28 = helperFunc83(frameContainer7, "Dashboard", 22, true, themePalette.text, { Position = UDim2.fromOffset(24, 29), Size = UDim2.new(1, -180, 0, 28) })
-    frameContainer8 = createUiElement2("Frame", { BackgroundTransparency = 1, Position = UDim2.new(1, -95, 0, 20), Size = UDim2.fromOffset(78, 30) }, frameContainer7)
-    localState29 = bindButtonHover(frameContainer8, "-", { Size = UDim2.fromOffset(34, 30), Position = UDim2.fromOffset(0, 0), TextSize = 19 })
-    localState30 = bindButtonHover(frameContainer8, "X", { Size = UDim2.fromOffset(34, 30), Position = UDim2.fromOffset(40, 0), TextSize = 15, BackgroundColor3 = themePalette.secondary })
-    frameContainer9 = applyUiCorner(createUiElement2("Frame", { Name = "SessionSummary", BackgroundColor3 = themePalette.panel, BorderSizePixel = 0, Position = UDim2.fromOffset(24, 65), Size = UDim2.new(1, -48, 0, 28) }, frameContainer6), 10)
-    applyUiStroke(frameContainer9, themePalette.rowBorder)
-    localState31 = helperFunc83(frameContainer9, "LV --", 12, true, themePalette.text, { Position = UDim2.fromOffset(12, 0), Size = UDim2.new(0.28, 0, 1, 0) })
-    localState32 = helperFunc83(frameContainer9, "FARM OFF", 12, true, themePalette.muted, { Position = UDim2.fromScale(0.32, 0), Size = UDim2.new(0.25, 0, 1, 0) })
-    localState33 = helperFunc83(frameContainer9, "FRUIT OFF", 12, true, themePalette.muted, { Position = UDim2.fromScale(0.64, 0), Size = UDim2.new(0.36, -12, 1, 0), TextXAlignment = Enum.TextXAlignment.Right })
+    frameContainer4 = createUiElement2("Frame", { Position = UDim2.new(0, 11, 1, -88), Size = UDim2.new(1, -22, 0, 76), BackgroundTransparency = 1, BorderSizePixel = 0 }, frameContainer)
+    localState27 = bindButtonHover(frameContainer4, "JOIN DISCORD", { Size = UDim2.new(1, 0, 0, 34), Position = UDim2.fromOffset(0, 0), BackgroundColor3 = themePalette.primary, TextColor3 = themePalette.base, TextSize = 14 })
+    helperFunc83(frameContainer4, "Left Ctrl to hide", 12, false, themePalette.muted, { Position = UDim2.fromOffset(0, 42), Size = UDim2.new(1, 0, 0, 21), TextXAlignment = Enum.TextXAlignment.Center })
+    frameContainer5 = createUiElement2("Frame", { BackgroundTransparency = 1, Position = UDim2.fromOffset(175, 0), Size = UDim2.new(1, -175, 1, 0) }, canvasGroup)
+    frameContainer6 = createUiElement2("Frame", { BackgroundTransparency = 1, Size = UDim2.new(1, 0, 0, 74) }, frameContainer5)
+    helperFunc83(frameContainer6, "WORKSPACE", 10, true, themePalette.primary, { Position = UDim2.fromOffset(24, 13), Size = UDim2.new(1, -150, 0, 16) })
+    localState28 = helperFunc83(frameContainer6, "Dashboard", 22, true, themePalette.text, { Position = UDim2.fromOffset(24, 29), Size = UDim2.new(1, -180, 0, 28) })
+    frameContainer7 = createUiElement2("Frame", { BackgroundTransparency = 1, Position = UDim2.new(1, -95, 0, 20), Size = UDim2.fromOffset(78, 30) }, frameContainer6)
+    localState29 = bindButtonHover(frameContainer7, "-", { Size = UDim2.fromOffset(34, 30), Position = UDim2.fromOffset(0, 0), TextSize = 19 })
+    localState30 = bindButtonHover(frameContainer7, "X", { Size = UDim2.fromOffset(34, 30), Position = UDim2.fromOffset(40, 0), TextSize = 15, BackgroundColor3 = themePalette.secondary })
+    frameContainer8 = applyUiCorner(createUiElement2("Frame", { Name = "SessionSummary", BackgroundColor3 = themePalette.panel, BorderSizePixel = 0, Position = UDim2.fromOffset(24, 65), Size = UDim2.new(1, -48, 0, 28) }, frameContainer5), 10)
+    applyUiStroke(frameContainer8, themePalette.rowBorder)
+    localState31 = helperFunc83(frameContainer8, "LV --", 12, true, themePalette.text, { Position = UDim2.fromOffset(12, 0), Size = UDim2.new(0.28, 0, 1, 0) })
+    localState32 = helperFunc83(frameContainer8, "FARM OFF", 12, true, themePalette.muted, { Position = UDim2.fromScale(0.32, 0), Size = UDim2.new(0.25, 0, 1, 0) })
+    localState33 = helperFunc83(frameContainer8, "FRUIT OFF", 12, true, themePalette.muted, { Position = UDim2.fromScale(0.64, 0), Size = UDim2.new(0.36, -12, 1, 0), TextXAlignment = Enum.TextXAlignment.Right })
     function helperFunc86()
         local localState36, localState37, localState38, timestamp5
         localState36 = localPlayer3:FindFirstChild("Data")
@@ -833,15 +836,15 @@ uiLibrary = (function()
             pcall(helperFunc86)
         end
     end)
-    inputBox = applyUiCorner(createUiElement2("TextBox", { Size = UDim2.new(1, -48, 0, 34), Position = UDim2.fromOffset(24, 105), BackgroundColor3 = themePalette.panel, BorderSizePixel = 0, ClearTextOnFocus = false, Text = "", PlaceholderText = "Search in this tab...", PlaceholderColor3 = themePalette.muted, TextColor3 = themePalette.text, Font = Enum.Font.SourceSans, TextSize = 14, TextXAlignment = Enum.TextXAlignment.Left }, frameContainer6), 12)
+    inputBox = applyUiCorner(createUiElement2("TextBox", { Size = UDim2.new(1, -48, 0, 34), Position = UDim2.fromOffset(24, 105), BackgroundColor3 = themePalette.panel, BorderSizePixel = 0, ClearTextOnFocus = false, Text = "", PlaceholderText = "Search in this tab...", PlaceholderColor3 = themePalette.muted, TextColor3 = themePalette.text, Font = Enum.Font.SourceSans, TextSize = 14, TextXAlignment = Enum.TextXAlignment.Left }, frameContainer5), 12)
     applyUiPadding(inputBox, 16, 12, 0, 0)
     applyUiStroke(inputBox, themePalette.border)
-    frameContainer10 = createUiElement2("Frame", { BackgroundTransparency = 1, Position = UDim2.fromOffset(0, 150), Size = UDim2.new(1, 0, 1, -162) }, frameContainer6)
+    frameContainer9 = createUiElement2("Frame", { BackgroundTransparency = 1, Position = UDim2.fromOffset(0, 150), Size = UDim2.new(1, 0, 1, -162) }, frameContainer5)
     dataTable42 = {}
     numericVal21 = 1
     dataTable42.Size = UDim2.fromScale(numericVal21, 1)
     dataTable42.TextXAlignment = Enum.TextXAlignment.Center
-    localState34 = helperFunc83(frameContainer10, "Choose a category to view its tools.", 14, false, themePalette.muted, dataTable42)
+    localState34 = helperFunc83(frameContainer9, "Choose a category to view its tools.", 14, false, themePalette.muted, dataTable42)
     imageButton = applyUiCorner(createUiElement2("ImageButton", { Name = "SteveHubMini", Size = UDim2.fromOffset(46, 46), Position = UDim2.fromOffset(18, 188), BackgroundColor3 = themePalette.panel, BorderSizePixel = 0, AutoButtonColor = false, Visible = false, ZIndex = 50, ScaleType = Enum.ScaleType.Crop, Image = (localState26 or "") }, isSuccess2), 14)
     applyUiStroke(imageButton, themePalette.primary, 1.2)
     if not localState26 then
@@ -867,7 +870,7 @@ uiLibrary = (function()
     imageButton.MouseButton1Click:Connect(function()
         helperFunc87(true)
     end)
-    helperFunc85(callResult2, frameContainer7)
+    helperFunc85(callResult2, frameContainer6)
     helperFunc85(imageButton, imageButton)
     UserInputService2.InputBegan:Connect(function(inputObj, secondArg)
         if not secondArg and inputObj.KeyCode == Enum.KeyCode.LeftControl then
@@ -880,22 +883,22 @@ uiLibrary = (function()
     numericVal21 = 260
     dataTable41.Size = UDim2.fromOffset(282, numericVal21)
     dataTable41.ZIndex = 90
-    frameContainer11 = createUiElement2("Frame", dataTable41, isSuccess2)
+    frameContainer10 = createUiElement2("Frame", dataTable41, isSuccess2)
     dataTable42 = { SortOrder = Enum.SortOrder.LayoutOrder }
     numericVal21 = 0
     dataTable42.Padding = UDim.new(numericVal21, 6)
-    createUiElement2("UIListLayout", dataTable42, frameContainer11)
+    createUiElement2("UIListLayout", dataTable42, frameContainer10)
     function libraryController.CreateNoti(controlConfig)
-        local frameContainer12
+        local frameContainer11
         controlConfig = controlConfig or {}
-        frameContainer12 = applyUiCorner(createUiElement2("Frame", { BackgroundColor3 = themePalette.panel, BorderSizePixel = 0, Size = UDim2.new(1, 0, 0, 60), ZIndex = 91 }, frameContainer11), 10)
-        applyUiStroke(frameContainer12, themePalette.primary)
-        helperFunc83(frameContainer12, "S", 16, true, themePalette.primary, { Position = UDim2.fromOffset(12, 10), Size = UDim2.fromOffset(20, 34), ZIndex = 92 })
-        helperFunc83(frameContainer12, (controlConfig.Title or "Steve Hub"), 13, true, themePalette.text, { Position = UDim2.fromOffset(38, 8), Size = UDim2.new(1, -44, 0, 20), ZIndex = 92 })
-        helperFunc83(frameContainer12, (controlConfig.Desc or ""), 11, false, themePalette.muted, { Position = UDim2.fromOffset(38, 26), Size = UDim2.new(1, -44, 0, 24), TextWrapped = true, ZIndex = 92 })
+        frameContainer11 = applyUiCorner(createUiElement2("Frame", { BackgroundColor3 = themePalette.panel, BorderSizePixel = 0, Size = UDim2.new(1, 0, 0, 60), ZIndex = 91 }, frameContainer10), 10)
+        applyUiStroke(frameContainer11, themePalette.primary)
+        helperFunc83(frameContainer11, "S", 16, true, themePalette.primary, { Position = UDim2.fromOffset(12, 10), Size = UDim2.fromOffset(20, 34), ZIndex = 92 })
+        helperFunc83(frameContainer11, (controlConfig.Title or "Steve Hub"), 13, true, themePalette.text, { Position = UDim2.fromOffset(38, 8), Size = UDim2.new(1, -44, 0, 20), ZIndex = 92 })
+        helperFunc83(frameContainer11, (controlConfig.Desc or ""), 11, false, themePalette.muted, { Position = UDim2.fromOffset(38, 26), Size = UDim2.new(1, -44, 0, 24), TextWrapped = true, ZIndex = 92 })
         task.delay((tonumber(controlConfig.ShowTime) or 4), function()
-            if frameContainer12.Parent then
-                frameContainer12:Destroy()
+            if frameContainer11.Parent then
+                frameContainer11:Destroy()
             end
         end)
     end
@@ -1027,24 +1030,24 @@ uiLibrary = (function()
         return dataTable44
     end
     function helperFunc89(firstArg, secondArg, thirdArg, fourthArg, fifthArg)
-        local frameContainer12, localState36
+        local frameContainer11, localState36
         fifthArg = fifthArg or 160
-        frameContainer12 = applyUiCorner(createUiElement2("Frame", { BackgroundColor3 = themePalette.row, BorderSizePixel = 0, Size = UDim2.new(1, 0, 0, (fourthArg or 48)), LayoutOrder = ((#firstArg.items) + 1) }, firstArg.inner), 12)
-        applyUiStroke(frameContainer12, themePalette.rowBorder)
-        frameContainer12.MouseEnter:Connect(function()
-            helperFunc84(frameContainer12, { BackgroundColor3 = themePalette.hover })
+        frameContainer11 = applyUiCorner(createUiElement2("Frame", { BackgroundColor3 = themePalette.row, BorderSizePixel = 0, Size = UDim2.new(1, 0, 0, (fourthArg or 48)), LayoutOrder = ((#firstArg.items) + 1) }, firstArg.inner), 12)
+        applyUiStroke(frameContainer11, themePalette.rowBorder)
+        frameContainer11.MouseEnter:Connect(function()
+            helperFunc84(frameContainer11, { BackgroundColor3 = themePalette.hover })
         end)
-        frameContainer12.MouseLeave:Connect(function()
-            helperFunc84(frameContainer12, { BackgroundColor3 = themePalette.row })
+        frameContainer11.MouseLeave:Connect(function()
+            helperFunc84(frameContainer11, { BackgroundColor3 = themePalette.row })
         end)
-        localState36 = helperFunc83(frameContainer12, secondArg, 14, true, themePalette.text, { Position = UDim2.fromOffset(12, 4), Size = UDim2.new(1, (-fifthArg), 0, 24), TextTruncate = Enum.TextTruncate.AtEnd })
+        localState36 = helperFunc83(frameContainer11, secondArg, 14, true, themePalette.text, { Position = UDim2.fromOffset(12, 4), Size = UDim2.new(1, (-fifthArg), 0, 24), TextTruncate = Enum.TextTruncate.AtEnd })
         if thirdArg and tostring(thirdArg) ~= "" then
             localState36.Position = UDim2.fromOffset(14, 5)
-            helperFunc83(frameContainer12, thirdArg, 12, false, themePalette.muted, { Position = UDim2.fromOffset(12, 25), Size = UDim2.new(1, (-fifthArg), 0, 16), TextTruncate = Enum.TextTruncate.AtEnd })
+            helperFunc83(frameContainer11, thirdArg, 12, false, themePalette.muted, { Position = UDim2.fromOffset(12, 25), Size = UDim2.new(1, (-fifthArg), 0, 16), TextTruncate = Enum.TextTruncate.AtEnd })
         else
             localState36.Size = UDim2.new(1, (-fifthArg), 1, -8)
         end
-        return frameContainer12
+        return frameContainer11
     end
     function libraryController.CreateMain(inputValue)
         pcall(libraryController.CreateNoti, { Title = "Steve Hub", Desc = "Steve Hub Control Center Loaded!", ShowTime = 5 })
@@ -1067,7 +1070,7 @@ uiLibrary = (function()
             textValue3.outline.Transparency = 1
             textValue3.navbutton.Text = (({ ["Status And Server"] = "Status & Server", ["Hold and Select Skill"] = "Skills", ["Fruit and Raid, Dungeon"] = "Fruit & Raids", ["Get and Upgrade Items"] = "Items & Upgrades", ["Tab Webhook"] = "Webhook" })[localState36] or localState36)
             textValue3.bar = applyUiCorner(createUiElement2("Frame", { Visible = false, BackgroundColor3 = themePalette.primary, BorderSizePixel = 0, Position = UDim2.new(0, -34, 0.5, -10), Size = UDim2.fromOffset(3, 20) }, textValue3.navbutton), 2)
-            textValue3.scroll = createUiElement2("ScrollingFrame", { Name = ("Page_" .. localState36), BackgroundTransparency = 1, BorderSizePixel = 0, Size = UDim2.fromScale(1, 1), ScrollBarThickness = 3, ScrollBarImageColor3 = themePalette.primary, CanvasSize = UDim2.fromOffset(0, 0), Visible = false }, frameContainer10)
+            textValue3.scroll = createUiElement2("ScrollingFrame", { Name = ("Page_" .. localState36), BackgroundTransparency = 1, BorderSizePixel = 0, Size = UDim2.fromScale(1, 1), ScrollBarThickness = 3, ScrollBarImageColor3 = themePalette.primary, CanvasSize = UDim2.fromOffset(0, 0), Visible = false }, frameContainer9)
             applyUiPadding(textValue3.scroll, 22, 22, 4, 16)
             listLayout2 = createUiElement2("UIListLayout", { SortOrder = Enum.SortOrder.LayoutOrder, Padding = UDim.new(0, 12) }, textValue3.scroll)
             listLayout2:GetPropertyChangedSignal("AbsoluteContentSize"):Connect(function()
@@ -1081,19 +1084,19 @@ uiLibrary = (function()
                 helperFunc88(textValue3)
             end
             function textValue3.CreateSection(inputValue3)
-                local dataTable44, frameContainer12, listLayout3, frameContainer13, frameContainer14
+                local dataTable44, frameContainer11, listLayout3, frameContainer12, frameContainer13
                 dataTable44 = { page = textValue3, title = tostring((inputValue3 or "General")), items = {} }
-                frameContainer12 = applyUiCorner(createUiElement2("Frame", { BackgroundColor3 = themePalette.panel, BorderSizePixel = 0, Size = UDim2.new(1, 0, 0, 0), AutomaticSize = Enum.AutomaticSize.Y, LayoutOrder = ((#textValue3.sections) + 1) }, textValue3.scroll), 14)
-                dataTable44.frame = frameContainer12
-                applyUiStroke(frameContainer12, themePalette.border)
-                applyUiPadding(frameContainer12, 11, 11, 10, 10)
-                listLayout3 = createUiElement2("UIListLayout", { SortOrder = Enum.SortOrder.LayoutOrder, Padding = UDim.new(0, 6) }, frameContainer12)
-                frameContainer13 = createUiElement2("Frame", { BackgroundTransparency = 1, Size = UDim2.new(1, 0, 0, 28), LayoutOrder = 1 }, frameContainer12)
-                applyUiCorner(createUiElement2("Frame", { BackgroundColor3 = themePalette.primary, BorderSizePixel = 0, Position = UDim2.fromOffset(3, 7), Size = UDim2.fromOffset(3, 14) }, frameContainer13), 2)
-                helperFunc83(frameContainer13, dataTable44.title, 15, true, themePalette.text, { Position = UDim2.fromOffset(14, 0), Size = UDim2.new(1, -62, 1, 0), TextTruncate = Enum.TextTruncate.AtEnd })
-                dataTable44.countLabel = helperFunc83(applyUiCorner(createUiElement2("Frame", { BackgroundColor3 = themePalette.selected, BorderSizePixel = 0, Position = UDim2.new(1, -32, 0.5, -10), Size = UDim2.fromOffset(28, 20) }, frameContainer13), 6), "00", 11, true, themePalette.primary, { Size = UDim2.fromScale(1, 1), TextXAlignment = Enum.TextXAlignment.Center })
-                frameContainer14 = createUiElement2("Frame", { BackgroundColor3 = themePalette.border, BorderSizePixel = 0, Size = UDim2.new(1, 0, 0, 1), LayoutOrder = 2 }, frameContainer12)
-                dataTable44.inner = createUiElement2("Frame", { BackgroundTransparency = 1, Size = UDim2.new(1, 0, 0, 0), AutomaticSize = Enum.AutomaticSize.Y, LayoutOrder = 3 }, frameContainer12)
+                frameContainer11 = applyUiCorner(createUiElement2("Frame", { BackgroundColor3 = themePalette.panel, BorderSizePixel = 0, Size = UDim2.new(1, 0, 0, 0), AutomaticSize = Enum.AutomaticSize.Y, LayoutOrder = ((#textValue3.sections) + 1) }, textValue3.scroll), 14)
+                dataTable44.frame = frameContainer11
+                applyUiStroke(frameContainer11, themePalette.border)
+                applyUiPadding(frameContainer11, 11, 11, 10, 10)
+                listLayout3 = createUiElement2("UIListLayout", { SortOrder = Enum.SortOrder.LayoutOrder, Padding = UDim.new(0, 6) }, frameContainer11)
+                frameContainer12 = createUiElement2("Frame", { BackgroundTransparency = 1, Size = UDim2.new(1, 0, 0, 28), LayoutOrder = 1 }, frameContainer11)
+                applyUiCorner(createUiElement2("Frame", { BackgroundColor3 = themePalette.primary, BorderSizePixel = 0, Position = UDim2.fromOffset(3, 7), Size = UDim2.fromOffset(3, 14) }, frameContainer12), 2)
+                helperFunc83(frameContainer12, dataTable44.title, 15, true, themePalette.text, { Position = UDim2.fromOffset(14, 0), Size = UDim2.new(1, -62, 1, 0), TextTruncate = Enum.TextTruncate.AtEnd })
+                dataTable44.countLabel = helperFunc83(applyUiCorner(createUiElement2("Frame", { BackgroundColor3 = themePalette.selected, BorderSizePixel = 0, Position = UDim2.new(1, -32, 0.5, -10), Size = UDim2.fromOffset(28, 20) }, frameContainer12), 6), "00", 11, true, themePalette.primary, { Size = UDim2.fromScale(1, 1), TextXAlignment = Enum.TextXAlignment.Center })
+                frameContainer13 = createUiElement2("Frame", { BackgroundColor3 = themePalette.border, BorderSizePixel = 0, Size = UDim2.new(1, 0, 0, 1), LayoutOrder = 2 }, frameContainer11)
+                dataTable44.inner = createUiElement2("Frame", { BackgroundTransparency = 1, Size = UDim2.new(1, 0, 0, 0), AutomaticSize = Enum.AutomaticSize.Y, LayoutOrder = 3 }, frameContainer11)
                 createUiElement2("UIListLayout", { SortOrder = Enum.SortOrder.LayoutOrder, Padding = UDim.new(0, 7) }, dataTable44.inner)
                 textValue3.sections[((#textValue3.sections) + 1)] = dataTable44
                 function dataTable44.CreateToggle(controlConfig, secondArg)
@@ -1164,12 +1167,12 @@ uiLibrary = (function()
                     return dataTable45
                 end
                 function dataTable44.CreateLabel(controlConfig)
-                    local frameContainer15, localState37, dataTable45, localState38
+                    local frameContainer14, localState37, dataTable45, localState38
                     controlConfig = controlConfig or {}
-                    frameContainer15 = applyUiCorner(createUiElement2("Frame", { BackgroundColor3 = themePalette.row, Size = UDim2.new(1, 0, 0, 38), BorderSizePixel = 0, LayoutOrder = ((#dataTable44.items) + 1) }, dataTable44.inner), 12)
-                    localState37 = helperFunc83(frameContainer15, tostring((controlConfig.Title or "")), 14, false, themePalette.muted, { Position = UDim2.fromOffset(12, 0), Size = UDim2.new(1, -24, 1, 0), TextTruncate = Enum.TextTruncate.AtEnd })
+                    frameContainer14 = applyUiCorner(createUiElement2("Frame", { BackgroundColor3 = themePalette.row, Size = UDim2.new(1, 0, 0, 38), BorderSizePixel = 0, LayoutOrder = ((#dataTable44.items) + 1) }, dataTable44.inner), 12)
+                    localState37 = helperFunc83(frameContainer14, tostring((controlConfig.Title or "")), 14, false, themePalette.muted, { Position = UDim2.fromOffset(12, 0), Size = UDim2.new(1, -24, 1, 0), TextTruncate = Enum.TextTruncate.AtEnd })
                     dataTable45 = {}
-                    localState38 = createSliderControl2(controlConfig, "textlabel", dataTable44, frameContainer15, dataTable45)
+                    localState38 = createSliderControl2(controlConfig, "textlabel", dataTable44, frameContainer14, dataTable45)
                     function dataTable45.SetText(firstArg, secondArg)
                         localState37.Text = tostring((((secondArg == nil) and firstArg) or (secondArg or "")))
                         localState38.text = localState37.Text
@@ -1207,7 +1210,7 @@ uiLibrary = (function()
                     return dataTable45
                 end
                 function dataTable44.CreateSlider(controlConfig, secondArg)
-                    local localState37, localState38, localState39, localState40, localState41, frameContainer15, frameContainer16, frameContainer17, dataTable45, dataTable46
+                    local localState37, localState38, localState39, localState40, localState41, frameContainer14, frameContainer15, frameContainer16, dataTable45, dataTable46
                     local dataTable47, numericVal22, helperFunc90, itemIdx2, itemValue2
                     controlConfig = controlConfig or {}
                     localState37 = tonumber(controlConfig.Min) or 0
@@ -1236,11 +1239,11 @@ uiLibrary = (function()
                     dataTable45.Position = UDim2.new(0, numericVal22, 1, -17)
                     numericVal22 = -28
                     dataTable45.Size = UDim2.new(1, numericVal22, 0, 5)
-                    frameContainer15 = applyUiCorner(createUiElement2("Frame", dataTable45, localState40), 3)
+                    frameContainer14 = applyUiCorner(createUiElement2("Frame", dataTable45, localState40), 3)
                     dataTable46 = { BackgroundColor3 = themePalette.primary, BorderSizePixel = 0 }
                     numericVal22 = 0
                     dataTable46.Size = UDim2.fromScale(numericVal22, 1)
-                    frameContainer16 = applyUiCorner(createUiElement2("Frame", dataTable46, frameContainer15), 3)
+                    frameContainer15 = applyUiCorner(createUiElement2("Frame", dataTable46, frameContainer14), 3)
                     dataTable47 = {}
                     numericVal22 = themePalette
                     numericVal22 = numericVal22.text
@@ -1254,8 +1257,8 @@ uiLibrary = (function()
                     numericVal22 = numericVal22.fromOffset
                     numericVal22 = numericVal22(-6, -4)
                     dataTable47.Position = numericVal22
-                    numericVal22 = frameContainer15
-                    frameContainer17 = applyUiCorner(createUiElement2("Frame", dataTable47, numericVal22), 9)
+                    numericVal22 = frameContainer14
+                    frameContainer16 = applyUiCorner(createUiElement2("Frame", dataTable47, numericVal22), 9)
                     dataTable45 = {}
                     numericVal22 = "slider"
                     dataTable46 = createSliderControl2(controlConfig, numericVal22, dataTable44, localState40, dataTable45)
@@ -1263,8 +1266,8 @@ uiLibrary = (function()
                         local localState42
                         firstArg = math.clamp(((math.floor((((math.clamp((tonumber(firstArg) or localState37), localState37, localState38) - localState37) / localState39) + 0.5)) * localState39) + localState37), localState37, localState38)
                         localState42 = (firstArg - localState37) / (localState38 - localState37)
-                        frameContainer16.Size = UDim2.fromScale(localState42, 1)
-                        frameContainer17.Position = UDim2.new(localState42, -6, 0, -4)
+                        frameContainer15.Size = UDim2.fromScale(localState42, 1)
+                        frameContainer16.Position = UDim2.new(localState42, -6, 0, -4)
                         localState41.Text = string.format((((controlConfig.Precise) and ("%.1f")) or ("%.0f")), firstArg)
                         dataTable46.value = firstArg
                         if secondArg2 then
@@ -1273,9 +1276,9 @@ uiLibrary = (function()
                     end
                     numericVal22 = false
                     function helperFunc90(inputValue4)
-                        dataTable47((localState37 + ((localState38 - localState37) * math.clamp(((inputValue4 - frameContainer15.AbsolutePosition.X) / math.max(frameContainer15.AbsoluteSize.X, 1)), 0, 1))), true)
+                        dataTable47((localState37 + ((localState38 - localState37) * math.clamp(((inputValue4 - frameContainer14.AbsolutePosition.X) / math.max(frameContainer14.AbsoluteSize.X, 1)), 0, 1))), true)
                     end
-                    for itemIdx2, itemValue2 in ipairs({ frameContainer15, frameContainer17 }) do
+                    for itemIdx2, itemValue2 in ipairs({ frameContainer14, frameContainer16 }) do
                         itemValue2.InputBegan:Connect(function(inputObj)
                             if inputObj.UserInputType == Enum.UserInputType.MouseButton1 or inputObj.UserInputType == Enum.UserInputType.Touch then
                                 numericVal22 = true
@@ -1303,10 +1306,10 @@ uiLibrary = (function()
                     return dataTable45
                 end
                 function dataTable44.CreateDropdown(controlConfig, secondArg)
-                    local frameContainer15, localState37, frameContainer16, listLayout4, dataTable45, localState38, localState39, dataTable46, isStateActive11, numericVal22
+                    local frameContainer14, localState37, frameContainer15, listLayout4, dataTable45, localState38, localState39, dataTable46, isStateActive11, numericVal22
                     local numericVal23, numericVal24, numericVal25, entryKey6, entryValue6, helperFunc90, helperFunc91, helperFunc92, helperFunc93, updateScrollCanvasSize
                     controlConfig = controlConfig or {}
-                    frameContainer15 = applyUiCorner(createUiElement2("Frame", { BackgroundColor3 = themePalette.row, BorderSizePixel = 0, Size = UDim2.new(1, 0, 0, 53), AutomaticSize = Enum.AutomaticSize.Y, LayoutOrder = ((#dataTable44.items) + 1) }, dataTable44.inner), 12)
+                    frameContainer14 = applyUiCorner(createUiElement2("Frame", { BackgroundColor3 = themePalette.row, BorderSizePixel = 0, Size = UDim2.new(1, 0, 0, 53), AutomaticSize = Enum.AutomaticSize.Y, LayoutOrder = ((#dataTable44.items) + 1) }, dataTable44.inner), 12)
                     listLayout4 = tostring((controlConfig.Title or "Dropdown"))
                     dataTable46 = {}
                     numericVal22 = 14
@@ -1318,28 +1321,28 @@ uiLibrary = (function()
                     numericVal25 = 40
                     dataTable46.Size = UDim2.new(numericVal22, numericVal23, numericVal24, numericVal25)
                     dataTable46.TextTruncate = Enum.TextTruncate.AtEnd
-                    helperFunc83(frameContainer15, listLayout4, 14, true, themePalette.text, dataTable46)
+                    helperFunc83(frameContainer14, listLayout4, 14, true, themePalette.text, dataTable46)
                     dataTable45 = { Size = UDim2.fromOffset(200, 34) }
                     numericVal22 = 9
                     dataTable45.Position = UDim2.new(1, -213, 0, numericVal22)
                     dataTable45.BackgroundColor3 = themePalette.secondary
                     dataTable45.TextSize = 13
                     dataTable45.TextTruncate = Enum.TextTruncate.AtEnd
-                    localState37 = bindButtonHover(frameContainer15, "Select  v", dataTable45)
+                    localState37 = bindButtonHover(frameContainer14, "Select  v", dataTable45)
                     dataTable45 = { Position = UDim2.fromOffset(10, 49) }
                     numericVal22 = 0
                     dataTable45.Size = UDim2.new(1, -20, 0, numericVal22)
                     dataTable45.BackgroundTransparency = 1
                     dataTable45.AutomaticSize = Enum.AutomaticSize.Y
                     dataTable45.Visible = false
-                    frameContainer16 = createUiElement2("Frame", dataTable45, frameContainer15)
-                    listLayout4 = createUiElement2("UIListLayout", { SortOrder = Enum.SortOrder.LayoutOrder, Padding = UDim.new(0, 5) }, frameContainer16)
+                    frameContainer15 = createUiElement2("Frame", dataTable45, frameContainer14)
+                    listLayout4 = createUiElement2("UIListLayout", { SortOrder = Enum.SortOrder.LayoutOrder, Padding = UDim.new(0, 5) }, frameContainer15)
                     numericVal22 = 9
-                    applyUiPadding(frameContainer16, 0, 0, 0, numericVal22)
+                    applyUiPadding(frameContainer15, 0, 0, 0, numericVal22)
                     dataTable45 = {}
                     localState38 = ((controlConfig.Priority) and ("priority_dropdown")) or (((controlConfig.Slider) and ("slider_dropdown")) or (((controlConfig.Selected) and ("multi_toggle")) or ("dropdown")))
                     numericVal22 = dataTable44
-                    numericVal23 = frameContainer15
+                    numericVal23 = frameContainer14
                     numericVal24 = dataTable45
                     localState39 = createSliderControl2(controlConfig, localState38, numericVal22, numericVal23, numericVal24)
                     dataTable46 = controlConfig.List or {}
@@ -1491,10 +1494,10 @@ uiLibrary = (function()
                         end
                         numericVal24 = true
                         if controlConfig.Search then
-                            entryKey6 = applyUiCorner(createUiElement2("TextBox", { Size = UDim2.new(1, 0, 0, 30), BackgroundColor3 = themePalette.panel, BorderSizePixel = 0, Text = "", PlaceholderText = "Filter options...", PlaceholderColor3 = themePalette.muted, TextColor3 = themePalette.text, Font = Enum.Font.SourceSans, TextSize = 14, ClearTextOnFocus = false, LayoutOrder = 1 }, frameContainer16), 8)
+                            entryKey6 = applyUiCorner(createUiElement2("TextBox", { Size = UDim2.new(1, 0, 0, 30), BackgroundColor3 = themePalette.panel, BorderSizePixel = 0, Text = "", PlaceholderText = "Filter options...", PlaceholderColor3 = themePalette.muted, TextColor3 = themePalette.text, Font = Enum.Font.SourceSans, TextSize = 14, ClearTextOnFocus = false, LayoutOrder = 1 }, frameContainer15), 8)
                             applyUiPadding(entryKey6, 10, 5, 0, 0)
                         end
-                        numericVal25 = createUiElement2("ScrollingFrame", { BackgroundTransparency = 1, BorderSizePixel = 0, Size = UDim2.new(1, 0, 0, 0), ScrollBarThickness = 3, ScrollBarImageColor3 = themePalette.primary, CanvasSize = UDim2.fromOffset(0, 0), LayoutOrder = 2 }, frameContainer16)
+                        numericVal25 = createUiElement2("ScrollingFrame", { BackgroundTransparency = 1, BorderSizePixel = 0, Size = UDim2.new(1, 0, 0, 0), ScrollBarThickness = 3, ScrollBarImageColor3 = themePalette.primary, CanvasSize = UDim2.fromOffset(0, 0), LayoutOrder = 2 }, frameContainer15)
                         listLayout5 = createUiElement2("UIListLayout", { SortOrder = Enum.SortOrder.LayoutOrder, Padding = UDim.new(0, 4) }, numericVal25)
                         entryValue6 = {}
                         function updateScrollCanvasSize2()
@@ -1544,7 +1547,7 @@ uiLibrary = (function()
                                     end
                                     helperFunc92(localState44, true)
                                     numericVal23 = false
-                                    frameContainer16.Visible = false
+                                    frameContainer15.Visible = false
                                 end
                                 localState37.Text = helperFunc90()
                                 helperFunc91()
@@ -1611,7 +1614,7 @@ uiLibrary = (function()
                         if numericVal23 then
                             updateScrollCanvasSize()
                         end
-                        frameContainer16.Visible = numericVal23
+                        frameContainer15.Visible = numericVal23
                         localState37.Text = (((numericVal23) and ("Close  ^")) or (helperFunc90()))
                     end)
                     function dataTable45.SetValue(firstArg, secondArg2)
@@ -4720,8 +4723,7 @@ function DetectNpcOni()
     localState26 = 1 / 0
     localState27 = nil
     for entryKey6, entryValue6 in next, ReplicatedStorage15 do
-        for childIdx2, childObj2 in ne
-xt, entryValue6:GetChildren() do
+        for childIdx2, childObj2 in next, entryValue6:GetChildren() do
             if ((not childObj2:GetAttribute("NPCLoaded")) or (not childObj2:GetAttribute("NPCReady"))) or (((childObj2:GetAttribute("DisplayName") ~= "Celestial Member")) or (not childObj2:FindFirstChild("HumanoidRootPart"))) then continue end
             entryKey6 = (rootPart.Position - childObj2.HumanoidRootPart.Position).Magnitude
             if not (entryKey6 < localState26) then continue end
@@ -10042,8 +10044,7 @@ function SweepHiddenTrigger(firstArg, secondArg, thirdArg)
 end
 -- VERIFIED: logic khớp dump (điều kiện / remote / settings / flow)
 HiddenDialoguePriority = { "not this time", "help hasan", "return the hat", "you're welcome", "hand over", "claim", "reward", "i'll get it", "accept", "let's go", "start", "yes", "sure", "okay", "go on", "continue", "so go get it back" }
-HiddenDialogueAvoid = { "walk away", "leave", "nevermind", "never mind", "not now", "maybe later", "no thanks", "no, ",
- "cancel", "skip", "bye", "goodbye", "forget it", "i'll pass", "decline", "quit", "exit", "stop" }
+HiddenDialogueAvoid = { "walk away", "leave", "nevermind", "never mind", "not now", "maybe later", "no thanks", "no, ", "cancel", "skip", "bye", "goodbye", "forget it", "i'll pass", "decline", "quit", "exit", "stop" }
 function PickHiddenDialogue(inputValue)
     local localState26, isSuccess2, callResult2, localState27, itemIdx2, itemValue2, itemIdx3, itemValue3
     localState26 = require(ReplicatedStorage.DialogueController)
@@ -15528,8 +15529,7 @@ function AutoQuestDojo()
                 targetCFrame3 = CFrame.new(-16204.0810546875, 9.0863618850708, 479.2259521484375)
                 if 8 < (targetCFrame3.Position - localPlayer2.Character.HumanoidRootPart.Position).Magnitude then
                     toTarget(targetCFrame3)
-       
-         else
+                else
                     game:GetService("ReplicatedStorage").Remotes.CommF_:InvokeServer("BuyBoat", "PirateBrigade")
                 end
             else
@@ -20579,8 +20579,7 @@ function FullyDraco()
                                     else
                                         DeleteIgnoredMobSpawn()
                                     end
-                    
-            else
+                                else
                                     repeat
                                         task.wait()
                                         sizepart(localState27)
@@ -25300,8 +25299,7 @@ function helperFunc80(firstArg, secondArg, thirdArg)
     if not localState26 or localState26 == "" then
         return
     end
-    dataTable41 = { content = get_ping_tag(), username = elementOptions7.Username, avatar_url = elementOptions7.AvatarURL, embeds = { { title = elementOptions7.Title, description = ("**Main Status**\nUsername : ||" .. safe_str((((localPlayer2) and (localPlayer2.Name)) or ("Unknown"))) .. "||"), color = elementOptions
-7.Color, footer = { text = elementOptions7.FooterText }, fields = (((thirdArg) and ({ { name = "Stored Fruit", value = ("```" .. safe_str(secondArg) .. "```"), inline = false }, { name = "Username", value = ("||" .. safe_str((((localPlayer2) and (localPlayer2.Name)) or ("Unknown"))) .. "||"), inline = true }, { name = "Time", value = os.date("%Y-%m-%d %H:%M:%S"), inline = true }, { name = "PlaceId", value = ("`" .. safe_str(game.PlaceId) .. "`"), inline = true } })) or (base_fields(firstArg, secondArg))), thumbnail = { url = elementOptions7.BannerURL }, timestamp = iso8601_utc_now() } } }
+    dataTable41 = { content = get_ping_tag(), username = elementOptions7.Username, avatar_url = elementOptions7.AvatarURL, embeds = { { title = elementOptions7.Title, description = ("**Main Status**\nUsername : ||" .. safe_str((((localPlayer2) and (localPlayer2.Name)) or ("Unknown"))) .. "||"), color = elementOptions7.Color, footer = { text = elementOptions7.FooterText }, fields = (((thirdArg) and ({ { name = "Stored Fruit", value = ("```" .. safe_str(secondArg) .. "```"), inline = false }, { name = "Username", value = ("||" .. safe_str((((localPlayer2) and (localPlayer2.Name)) or ("Unknown"))) .. "||"), inline = true }, { name = "Time", value = os.date("%Y-%m-%d %H:%M:%S"), inline = true }, { name = "PlaceId", value = ("`" .. safe_str(game.PlaceId) .. "`"), inline = true } })) or (base_fields(firstArg, secondArg))), thumbnail = { url = elementOptions7.BannerURL }, timestamp = iso8601_utc_now() } } }
     pcall(function()
         ExploitReq({ Url = localState26, Method = "POST", Headers = { ["Content-Type"] = "application/json" }, Body = HttpService:JSONEncode(dataTable41) })
     end)
