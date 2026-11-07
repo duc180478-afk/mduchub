@@ -6,13 +6,14 @@
       * 100% meaningful semantic identifiers (zero dump register names)
       * 100% clean Luau control flow (zero compiler repeat-until-true or goto)
       * 100% verified condition, RemoteEvent/RemoteFunction, Settings & UI fidelity
+      * Removed Banana Cat Hub Key Check / Cipher / Web Config Auth
     ================================================================================
 ]]
 
 -- =============================================================================
 -- [PHASE 1.1] CORE BOOTSTRAP, SEA CHECK, HELPERS & CONFIG SYSTEM
 -- =============================================================================
-local hasQuestTitleRaw, questGraceExpireTime, localPlayer2, uiLibrary, dataTable, shopButtonsByKey, loadBananaCatCipher, savedJobIdsList, cachedAncientStatusText, selectStatsDropdownCfg
+local hasQuestTitleRaw, questGraceExpireTime, localPlayer2, uiLibrary, dataTable, shopButtonsByKey, savedJobIdsList, cachedAncientStatusText, selectStatsDropdownCfg
 local dataTable2, dataTable3, dataTable4, textValue2, helperFunc, PlayersService, ReplicatedStorage2, VirtualInputManager2, helperFunc2, helperFunc3
 local isStateActive2, helperFunc5, helperFunc6, createUiElement, RunService, dataTable6, helperFunc8, ReplicatedStorage7, helperFunc39, localState5
 local isStateActive7, dropdownControl, elementOptions, WorkspaceService2, createSliderControl, textValue5, elementOptions3, dataTable21, dataTable22, dataTable23
@@ -3625,35 +3626,12 @@ SectionServer.CreateButton({ Title = "Open Gui Server Browser (Low Player and Pi
 end)
 StatusPlaceId = SectionServer.CreateLabel({ Title = ("PlaceId: " .. game.PlaceId) })
 serverBrowserStatusMsg = ""
-SectionServer.CreateBox({ Title = "Input JobId Normal And JobId BananaCat", Placeholder = "Type here", Number = false, Default = nil }, function(inputValue)
+SectionServer.CreateBox({ Title = "Input JobId", Placeholder = "Type here", Number = false, Default = nil }, function(inputValue)
     serverBrowserStatusMsg = inputValue
 end)
 SectionServer.CreateToggle({ Title = "Spam Join", Desc = nil, Default = (Settings["Spam Join"] or false) }, function(inputValue)
     SaveSettings("Spam Join", inputValue)
 end)
-if not bit32 and not bit then
-    loadBananaCatCipher = { bxor = function(firstArg, secondArg)
-        local numericVal, numericVal2, localState, localState2, localState3
-        numericVal = 0
-        numericVal2 = 1
-        while 0 < firstArg or 0 < secondArg do
-            localState = firstArg % 2
-            localState2 = secondArg % 2
-            localState3 = (function()
-                if localState ~= localState2 then
-                    return (numericVal + numericVal2)
-                end
-                return numericVal
-            end)()
-            numericVal2 = numericVal2 * 2
-            numericVal = localState3
-            secondArg = ((secondArg - localState2) / 2)
-            firstArg = ((firstArg - localState) / 2)
-        end
-        return numericVal
-    end }
-end
-loadBananaCatCipher = loadstring("local function EQ(a, r)\n local b, c = nil, nil\n local success = pcall(function()\n b, c = a, r\n end)\n\n if not success or b == nil or c == nil then\n return false\n end\n\n if type(b) ~= type(c) then\n return false\n end\n\n local d = { c, b, c, b }\n if d[1] ~= d[1] then\n return false\n end\n if d[1] ~= d[2] then\n return false\n end\n if d[2] ~= d[1] then\n return false\n end\n\n local e, f, g = 1 and 2, 2 and nil, true == not not true\n\n if type(b) == \"number\" and type(c) == \"number\" then\n if e and g and not f then\n return b == c\n end\n elseif type(b) == \"string\" and type(c) == \"string\" then\n if e and g then\n return b == c\n end\n else\n return b == c\n end\n\n return false\nend\n\nlocal function _vrf()\n local x = os.time and os.time() or 12345\n if tostring(print):find(\"function\") == nil then\n while true do\n end\n end\n if tostring(type):find(\"function\") == nil then\n while true do\n end\n end\n if (x * x + x) % 2 ~= 0 then\n while true do\n end\n end\n if not EQ(x, x) then\n while true do\n end\n end\nend\n\nlocal function _gct()\n _vrf()\n local s, p1, p2, p3 = 17, {}, {}, {}\n local _m = { [17] = 23, [23] = 41, [41] = 999 }\n\n while true do\n if s == 17 then\n for i = 0, 255 do\n local c = (\"%c\"):format(i)\n p1[i] = c\n p2[c] = i\n end\n s = _m[17]\n elseif s == 23 then\n for i = 0, 255 do\n p3[i] = p1[i]\n end\n s = _m[23]\n elseif s == 41 then\n if EQ(s, 41) then\n return p3, p2\n else\n while true do\n end\n end\n else\n while true do\n end\n end\n end\nend\n\nlocal _CT, _BT = _gct()\n\nlocal _sp = (function()\n local _xk = { 0x61, 0x9A, 0x43, 0xF1, 0x27, 0xBC, 0x58, 0x0D, 0xE7, 0x33 }\n\n local _enc = {\n { 0x9A, 0x71, 0x24, 0xEF, 0x38, 0x4C },\n { 0x7D, 0xA1, 0x55, 0x92, 0xB7, 0x44, 0x18 },\n { 0x2F, 0xC3, 0x89, 0x11, 0xD4, 0x67 },\n { 0xA8, 0x3E, 0xD1, 0x5B },\n { 0x44, 0xE2, 0x71, 0x9C, 0x0A, 0xD8, 0x61, 0xF4 },\n { 0x1E, 0x7B, 0xC0, 0x35, 0x92, 0xAF, 0x4D, 0x28 },\n { 0xF3, 0x60, 0x1A, 0x87, 0xCE, 0x39, 0x54 },\n { 0x88, 0x2D, 0xB6, 0x41, 0xFA, 0x73, 0x19, 0xCC, 0x05 },\n }\n\n local function _dec(data, seed)\n local result = \"\"\n local state = seed or 0x53\n\n for i = 1, #data do\n local byte = data[i]\n local keyIdx = ((i - 1) % #_xk) + 1\n local key = _xk[keyIdx]\n\n byte = bit32.bxor(byte, key)\n byte = (byte - state + 256) % 256\n byte = bit32.bxor(byte, (i * 23) % 256)\n state = (state + i + key + 17) % 256\n\n result = result .. _CT[byte]\n end\n\n return result\n end\n\n local _d = {}\n for i = 1, #_enc do\n _d[i] = _dec(_enc[i], (i * 0x29) % 256)\n end\n\n return _d\nend)()\n\nlocal function _gb(str, pos)\n _vrf()\n local c, s = 0, 5\n local _states = { [5] = 7, [7] = 11, [11] = 999 }\n\n while true do\n if s == 5 then\n for ch in str:gmatch(\".\") do\n c = c + 1\n if c == pos then\n s = _states[5]\n break\n end\n end\n if s ~= 7 then\n s = _states[11]\n end\n elseif s == 7 then\n local ch = \"\"\n local cnt = 0\n for c2 in str:gmatch(\".\") do\n cnt = cnt + 1\n if cnt == pos then\n ch = c2\n break\n end\n end\n if EQ(_BT[ch] or 0, _BT[ch] or 0) then\n return _BT[ch] or 0\n end\n elseif s == 11 then\n return 0\n end\n end\nend\n\nlocal function _tc(num)\n if EQ(num, num) then\n return _CT[num % 256]\n end\n while true do\n end\nend\n\nlocal function _js(tbl)\n local r, s = \"\", 3\n local _sm = { [3] = 8, [8] = 999 }\n\n while true do\n if s == 3 then\n for i = 1, #tbl do\n r = r .. tbl[i]\n end\n s = _sm[3]\n elseif s == 8 then\n if EQ(r, r) then\n return r\n end\n end\n end\nend\n\nlocal function _gl(str)\n _vrf()\n local c = 0\n for _ in str:gmatch(\".\") do\n c = c + 1\n end\n if EQ(c, c) then\n return c\n end\n return 0\nend\n\nlocal function _rp(str, pat, rep)\n _vrf()\n local r, pl, m = \"\", _gl(pat), true\n\n for i = 1, pl do\n if _gb(str, i) ~= _gb(pat, i) then\n m = false\n break\n end\n end\n\n if m and EQ(m, true) then\n r = rep\n for i = pl + 1, _gl(str) do\n local ch = \"\"\n local cnt = 0\n for c in str:gmatch(\".\") do\n cnt = cnt + 1\n if cnt == i then\n ch = c\n break\n end\n end\n r = r .. ch\n end\n return r\n end\n\n return str\nend\n\nlocal function _cs(...)\n local args, r = { ... }, \"\"\n for i = 1, #args do\n r = r .. args[i]\n end\n if EQ(r, r) then\n return r\n end\n return \"\"\nend\n\nlocal function _gks(key, len)\n _vrf()\n local ks, kl, st = {}, _gl(key), 0\n\n for i = 1, len do\n local kp = ((i - 1) % kl) + 1\n local kb = _gb(key, kp)\n st = (st + kb + i + ((i * 11) % 256)) % 256\n ks[i] = (kb + st + (i * 17) + ((kb * 3) % 256)) % 256\n end\n\n if EQ(#ks, len) then\n return ks\n end\n return {}\nend\n\nlocal function _mix_key_material(key, salt)\n _vrf()\n local rev = key:reverse()\n local out = {}\n local src = _cs(key, salt, rev, _tc(_gl(key) % 256), _tc(_gl(salt) % 256))\n\n for i = 1, _gl(src) do\n local b = _gb(src, i)\n b = bit32.bxor(b, (i * 29) % 256)\n b = (b + ((i * 7) % 256)) % 256\n out[i] = _tc(b)\n end\n\n return _js(out)\nend\n\nlocal function _derive_stream(key, salt, len)\n _vrf()\n local km = _mix_key_material(key, salt)\n return _gks(km, len)\nend\n\nlocal function _randb()\n return math.random(0, 255)\nend\n\nlocal function _gensalt128()\n _vrf()\n local t = {}\n for i = 1, 16 do\n t[i] = _tc(_randb())\n end\n return _js(t)\nend\n\nlocal function _secure_round_enc(key, data, salt, round_idx)\n _vrf()\n local dl = _gl(data)\n local ks = _derive_stream(_cs(key, _tc(48 + round_idx)), salt, dl)\n local r = {}\n local st = (_gl(key) + _gl(salt) + round_idx * 37 + 91) % 256\n\n for i = 1, dl do\n local db = _gb(data, i)\n local sb = _gb(salt, ((i + round_idx - 2) % 16) + 1)\n local kk = ks[i]\n\n st = (st + kk + sb + i + round_idx) % 256\n\n local enc = db\n enc = bit32.bxor(enc, kk)\n enc = (enc + st + sb) % 256\n enc = bit32.bxor(enc, ((i * 31) + sb + round_idx * 9) % 256)\n enc = (enc + ((kk * 5) % 256)) % 256\n\n r[i] = _tc(enc)\n end\n\n return _js(r)\nend\n\nlocal function _secure_round_dec(key, data, salt, round_idx)\n _vrf()\n local dl = _gl(data)\n local ks = _derive_stream(_cs(key, _tc(48 + round_idx)), salt, dl)\n local r = {}\n local st = (_gl(key) + _gl(salt) + round_idx * 37 + 91) % 256\n\n for i = 1, dl do\n local sb = _gb(salt, ((i + round_idx - 2) % 16) + 1)\n local kk = ks[i]\n\n st = (st + kk + sb + i + round_idx) % 256\n\n local eb = _gb(data, i)\n\n local db = eb\n db = (db - ((kk * 5) % 256) + 256) % 256\n db = bit32.bxor(db, ((i * 31) + sb + round_idx * 9) % 256)\n db = (db - st - sb + 512) % 256\n db = bit32.bxor(db, kk)\n\n r[i] = _tc(db)\n end\n\n return _js(r)\nend\n\nlocal function _ae(key, data, salt, rnd)\n _vrf()\n rnd = rnd or 3\n local r = data\n\n for rd = 1, rnd do\n r = _secure_round_enc(key, r, salt, rd)\n if not EQ(r, r) then\n while true do\n end\n end\n end\n\n return r\nend\n\nlocal function _ad(key, data, salt, rnd)\n _vrf()\n rnd = rnd or 3\n local r = data\n\n for rd = rnd, 1, -1 do\n r = _secure_round_dec(key, r, salt, rd)\n if not EQ(r, r) then\n while true do\n end\n end\n end\n\n return r\nend\n\nlocal _b64 = (function()\n local chs = string.char(\n 65,\n 66,\n 67,\n 68,\n 69,\n 70,\n 71,\n 72,\n 73,\n 74,\n 75,\n 76,\n 77,\n 78,\n 79,\n 80,\n 81,\n 82,\n 83,\n 84,\n 85,\n 86,\n 87,\n 88,\n 89,\n 90,\n 97,\n 98,\n 99,\n 100,\n 101,\n 102,\n 103,\n 104,\n 105,\n 106,\n 107,\n 108,\n 109,\n 110,\n 111,\n 112,\n 113,\n 114,\n 115,\n 116,\n 117,\n 118,\n 119,\n 120,\n 121,\n 122,\n 48,\n 49,\n 50,\n 51,\n 52,\n 53,\n 54,\n 55,\n 56,\n 57,\n 43,\n 47\n )\n\n local function enc(data)\n _vrf()\n local r, dl = {}, _gl(data)\n local i = 1\n\n while i <= dl do\n local b1 = _gb(data, i)\n local b2 = i + 1 <= dl and _gb(data, i + 1) or 0\n local b3 = i + 2 <= dl and _gb(data, i + 2) or 0\n\n local n = b1 * 65536 + b2 * 256 + b3\n\n local c1 = (n // 262144) % 64 + 1\n local c2 = (n // 4096) % 64 + 1\n local c3 = (n // 64) % 64 + 1\n local c4 = n % 64 + 1\n\n r[#r + 1] = _gb(chs, c1)\n r[#r + 1] = _gb(chs, c2)\n r[#r + 1] = i + 1 <= dl and _gb(chs, c3) or 61\n r[#r + 1] = i + 2 <= dl and _gb(chs, c4) or 61\n\n i = i + 3\n end\n\n local out = {}\n for idx = 1, #r do\n out[idx] = _tc(r[idx])\n end\n\n if EQ(_js(out), _js(out)) then\n return _js(out)\n end\n return \"\"\n end\n\n local function dec(data)\n _vrf()\n local r, dl = {}, _gl(data)\n local i = 1\n\n while i <= dl do\n local c1 = _gb(data, i)\n local c2 = _gb(data, i + 1)\n local c3 = _gb(data, i + 2)\n local c4 = _gb(data, i + 3)\n\n local function fp(byte)\n if byte == 61 then\n return 0\n end\n for p = 1, 64 do\n if _gb(chs, p) == byte then\n return p - 1\n end\n end\n return 0\n end\n\n local n1, n2, n3, n4 = fp(c1), fp(c2), fp(c3), fp(c4)\n local n = n1 * 262144 + n2 * 4096 + n3 * 64 + n4\n\n r[#r + 1] = _tc((n // 65536) % 256)\n if c3 ~= 61 then\n r[#r + 1] = _tc((n // 256) % 256)\n end\n if c4 ~= 61 then\n r[#r + 1] = _tc(n % 256)\n end\n\n i = i + 4\n end\n\n if EQ(_js(r), _js(r)) then\n return _js(r)\n end\n return \"\"\n end\n\n return { encode = enc, decode = dec }\nend)()\n\nlocal function _seed_rng()\n local seed = (os.time and os.time() or 12345)\n + math.floor((os.clock and os.clock() or 0) * 100000)\n + math.random(1, 999999)\n\n math.randomseed(seed)\n math.random()\n math.random()\n math.random()\nend\n\n_seed_rng()\n\nlocal function ebgzqifrwa(plaintext)\n _vrf()\n local k = _cs(_sp[5], _sp[6], _sp[7], _sp[8])\n if not EQ(k, k) then\n while true do\n end\n end\n\n local salt = _gensalt128()\n local enc = _ae(k, plaintext, salt, 3)\n local payload = _cs(salt, enc)\n local b64 = _b64.encode(payload)\n\n if EQ(b64, b64) then\n return _cs(\"BananaCat-\", b64)\n end\n return \"\"\nend\n\nlocal function lebidlyjyf(encrypted)\n _vrf()\n local k = _cs(_sp[5], _sp[6], _sp[7], _sp[8])\n if not EQ(k, k) then\n while true do\n end\n end\n\n local ed = _rp(encrypted, \"BananaCat-\", \"\")\n local dc = _b64.decode(ed)\n\n if _gl(dc) < 16 then\n return \"\"\n end\n\n local salt_tbl = {}\n local data_tbl = {}\n\n for i = 1, 16 do\n salt_tbl[#salt_tbl + 1] = _tc(_gb(dc, i))\n end\n\n for i = 17, _gl(dc) do\n data_tbl[#data_tbl + 1] = _tc(_gb(dc, i))\n end\n\n local salt = _js(salt_tbl)\n local data = _js(data_tbl)\n\n if EQ(data, data) then\n return _ad(k, data, salt, 3)\n end\n return \"\"\nend\nreturn ebgzqifrwa, lebidlyjyf\n")
 Realm = require((game:GetService("ReplicatedStorage").Util).Realm)
 function tryTeleport(firstArg, secondArg, thirdArg)
     local isSuccess, callResult
@@ -3679,30 +3657,12 @@ function teleportSmart(inputValue)
     end
 end
 SectionServer.CreateButton({ Title = "Join JobId" }, function()
-    local localState, localState2, localState3, localState4
     if Settings["Spam Join"] then
-        while true do
-            if not task.wait() then break end
-            localState = serverBrowserStatusMsg
-            localState2, localState3 = loadBananaCatCipher()
-            localState4 = string.find
-            game:GetService("ReplicatedStorage").__ServerBrowser:InvokeServer("teleport", (function()
-                if localState4(serverBrowserStatusMsg, "BananaCat-") then
-                    return localState3(serverBrowserStatusMsg)
-                end
-                return localState
-            end)())
+        while task.wait() do
+            game:GetService("ReplicatedStorage").__ServerBrowser:InvokeServer("teleport", serverBrowserStatusMsg)
         end
     else
-        localState = serverBrowserStatusMsg
-        localState2, localState3 = loadBananaCatCipher()
-        localState4 = string.find
-        game:GetService("ReplicatedStorage").__ServerBrowser:InvokeServer("teleport", (function()
-            if localState4(serverBrowserStatusMsg, "BananaCat-") then
-                return localState3(serverBrowserStatusMsg)
-            end
-            return localState
-        end)())
+        game:GetService("ReplicatedStorage").__ServerBrowser:InvokeServer("teleport", serverBrowserStatusMsg)
     end
 end)
 SectionServer.CreateButton({ Title = "Copy JobId" }, function()
@@ -4148,191 +4108,6 @@ SectionLocalPlayerMain.CreateButton({ Title = "Fix UI Button Game" }, function()
     end
     wait(0.5)
     localPlayer2.Character.Humanoid.Health = 0
-end)
-SectionLocalPlayerMain.CreateButton({ Title = "Load config in Web" }, function()
-    local HttpService2, textValue, localState, localState2, isSuccess, callResult
-    HttpService2 = game:GetService("HttpService")
-    game:GetService("RunService")
-    textValue = "https://cfg.banana-hub.xyz"
-    localState = getgenv().Key
-    localState2 = game.Players.LocalPlayer.Name
-    function ApplyConfigFromWeb(inputValue)
-        local entryKey
-        for entryKey, entryValue in pairs(inputValue) do
-            if not entryValue.name then
-                continue
-            end
-            entryKey = Options[entryValue.name]
-            if (not entryKey) or (not entryValue) then continue end
-            if entryValue.value ~= nil and entryKey.type ~= "slider_dropdown" and entryKey.type ~= "priority_dropdown" then
-                if entryKey.FunctionCreate and entryKey.FunctionCreate.SetValue then
-                    if entryKey.type == "box" then
-                        entryKey.FunctionCreate.SetValue(tostring(entryValue.value))
-                    elseif entryKey.type == "dropdown" then
-                        entryKey.FunctionCreate.SetValue(entryValue.value)
-                    elseif entryKey.type == "slider" then
-                        entryKey.FunctionCreate.SetValue(entryValue.value)
-                    else
-                        entryKey.FunctionCreate:SetValue(entryValue.value)
-                    end
-                elseif entryKey.FunctionCreate and entryKey.FunctionCreate.SetStage then
-                    entryKey.FunctionCreate.SetStage(entryValue.value)
-                end
-            end
-            if entryKey.type == "priority_dropdown" and entryValue.selected and entryKey.FunctionCreate and entryKey.FunctionCreate.SetValue then
-                entryKey.FunctionCreate.SetValue(entryValue.selected)
-            end
-            if ((entryKey.type ~= "slider_dropdown")) or (not entryValue.values) then continue end
-            for entryKey2, entryValue2 in pairs(entryValue.values) do
-                if (not entryKey.FunctionCreate) or (not entryKey.FunctionCreate.SetSubValue) then continue end
-                entryKey.FunctionCreate:SetSubValue(entryKey2, entryValue2)
-            end
-        end
-    end
-    isSuccess, callResult = pcall(function()
-        return request({ Url = string.format("%s/config/get?authId=%s&userId=%s&roblox=true", textValue, HttpService2:UrlEncode(localState), HttpService2:UrlEncode(localState2)), Method = "GET" })
-    end)
-    if isSuccess and callResult.StatusCode == 200 then
-        ApplyConfigFromWeb(HttpService2:JSONDecode(callResult.Body))
-    end
-end)
-SectionLocalPlayerMain.CreateButton({ Title = "Push Data To Web ( just push when join game,if push again plz rejoin )" }, function()
-    local HttpService2, textValue, localState, localState2
-    HttpService2 = game:GetService("HttpService")
-    textValue = "https://cfg.banana-hub.xyz"
-    function BuildSchema()
-        local dataTable, numericVal, localState, localState2, localState3, dataTable2, numericVal2, numericVal3
-        dataTable = {}
-        numericVal = 1
-        for entryKey, entryValue in pairs(Options) do
-            localState = entryValue.Page_Name or "Default Page"
-            localState2 = entryValue.Section_Name or "Default Section"
-            localState3 = tostring(numericVal)
-            if entryValue.type == "toggle" then
-                dataTable[localState3] = { name = entryKey, type = "toggle", value = entryValue.value, page = localState, section = localState2 }
-            elseif entryValue.type == "button" then
-                dataTable[localState3] = { name = entryKey, type = "button", value = entryKey, text = entryKey, page = localState, section = localState2 }
-            elseif entryValue.type == "textlabel" then
-                local shouldContinueStep_13 = true
-                if entryValue.FunctionCreate and entryValue.FunctionCreate.GetText then
-                    dataTable2 = entryValue.FunctionCreate.GetText()
-                    if dataTable2 then shouldContinueStep_13 = false end
-                end
-                if shouldContinueStep_13 then
-                    dataTable2 = entryValue.text
-                    if not dataTable2 then
-                        dataTable2 = entryKey
-                    end
-                end
-                dataTable[localState3] = { name = entryKey, type = "label", value = dataTable2, text = dataTable2, color = (entryValue.color or "#B8B8B8"), size = (entryValue.size or "14px"), bold = (entryValue.bold or false), page = localState, section = localState2 }
-            elseif entryValue.type == "box" then
-                dataTable[localState3] = { name = entryKey, type = "box", value = (entryValue.value or ""), page = localState, section = localState2 }
-            elseif entryValue.type == "slider" then
-                dataTable2 = { name = entryKey, type = "slider", min = (entryValue.min or 0), max = (entryValue.max or 100), step = (entryValue.step or 1) }
-                numericVal2 = entryValue.value
-                if not numericVal2 then
-                    numericVal2 = entryValue.min
-                    if not numericVal2 then
-                        numericVal2 = 0
-                    end
-                end
-                dataTable2.value = numericVal2
-                dataTable2.page = localState
-                dataTable2.section = localState2
-                dataTable[localState3] = dataTable2
-            elseif entryValue.type == "dropdown" then
-                dataTable[localState3] = { name = entryKey, type = "dropdown", options = table.clone((entryValue.list or {})), value = (entryValue.value or ((entryValue.list) and (entryValue.list[1])) or ("")), page = localState, section = localState2 }
-            elseif entryValue.type == "priority_dropdown" then
-                dataTable2 = table.clone((entryValue.value or {}))
-                dataTable[localState3] = { name = entryKey, type = "priority_dropdown", options = table.clone((entryValue.list or {})), selected = dataTable2, value = dataTable2, page = localState, section = localState2 }
-            elseif entryValue.type == "multi_toggle" then
-                dataTable[localState3] = { name = entryKey, type = "multi_toggle", options = table.clone((entryValue.list or {})), value = table.clone((entryValue.value or {})), page = localState, section = localState2 }
-            elseif entryValue.type == "slider_dropdown" then
-                dataTable2 = {}
-                numericVal2 = {}
-                for entryKey2, entryValue2 in pairs((entryValue.list or {})) do
-                    dataTable2[entryKey2] = { min = (entryValue2.min or 0), max = (entryValue2.max or 100), step = (entryValue2.step or 1) }
-                    local shouldContinueStep_12 = true
-                    if entryValue.value then
-                        numericVal3 = entryValue.value[entryKey2]
-                        if numericVal3 then shouldContinueStep_12 = false end
-                    end
-                    if shouldContinueStep_12 then
-                        numericVal3 = entryValue2.Default
-                        if not numericVal3 then
-                            numericVal3 = entryValue2.min
-                            if not numericVal3 then
-                                numericVal3 = 0
-                            end
-                        end
-                    end
-                    numericVal2[entryKey2] = numericVal3
-                end
-                dataTable[localState3] = { name = entryKey, type = "slider_dropdown", sliders = dataTable2, values = numericVal2, page = localState, section = localState2 }
-            end
-            numericVal = numericVal + 1
-        end
-        return dataTable
-    end
-    function UploadSchemaToWeb(firstArg, secondArg)
-        local localState, isSuccess, callResult
-        if not firstArg or not secondArg then
-            warn("❌ Missing authId or userId for schema upload")
-            return false
-        end
-        localState = BuildSchema()
-        isSuccess, callResult = pcall(function()
-            return request({ Url = string.format("%s/schema/init?authId=%s&userId=%s", textValue, HttpService2:UrlEncode(firstArg), HttpService2:UrlEncode(secondArg)), Method = "POST", Headers = { ["Content-Type"] = "application/json" }, Body = HttpService2:JSONEncode(localState) })
-        end)
-        if isSuccess and callResult.StatusCode == 200 then
-            print("✅ Schema initialized (first time)")
-            return true
-        end
-        if isSuccess and callResult.StatusCode == 409 then
-            print("ℹ️ Schema already exists, skipping upload")
-            return true
-        end
-        warn("❌ Schema upload failed")
-        if isSuccess then
-            warn("Status:", callResult.StatusCode)
-            warn("Body:", callResult.Body)
-        end
-        return false
-    end
-    function PushSchemaToWebupdate(firstArg, secondArg)
-        local localState, isSuccess, callResult
-        if not firstArg or not secondArg then
-            return
-        end
-        localState = BuildSchema()
-        isSuccess, callResult = pcall(function()
-            return request({ Url = string.format("%s/schema/update?authId=%s&userId=%s", textValue, HttpService2:UrlEncode(firstArg), HttpService2:UrlEncode(secondArg)), Method = "POST", Headers = { ["Content-Type"] = "application/json" }, Body = HttpService2:JSONEncode(localState) })
-        end)
-        if isSuccess and callResult.StatusCode == 200 then
-            print("✅ Schema UPDATED → web will reload")
-        else
-            warn("❌ Push schema failed")
-            if isSuccess then
-                warn("Status:", callResult.StatusCode)
-                warn("Body:", callResult.Body)
-            end
-        end
-    end
-    localState = getgenv().Key
-    localState2 = game.Players.LocalPlayer.Name
-    if not localState then
-        warn("Missing Key, cannot push data")
-        return
-    end
-    request({ Url = ("https://cfg.banana-hub.xyz/config/get?authId=" .. localState .. "&userId=" .. localState2 .. "&roblox=true"), Method = "GET" })
-    function ForceResetSchema(firstArg, secondArg)
-        pcall(function()
-            request({ Url = string.format("%s/schema/delete?authId=%s&userId=%s", textValue, HttpService2:UrlEncode(firstArg), HttpService2:UrlEncode(secondArg)), Method = "DELETE" })
-        end)
-        wait(0.5)
-        return UploadSchemaToWeb(firstArg, secondArg)
-    end
-    ForceResetSchema(localState, localState2)
 end)
 uiControllerModule = require(game.ReplicatedStorage:WaitForChild("Controllers"):WaitForChild("UI"):WaitForChild("Inventory"))
 SectionLocalPlayerMain.CreateButton({ Title = "Show Item" }, function()
@@ -8498,10 +8273,7 @@ function helperFunc56(firstArg, secondArg)
 end
 localState9 = nil
 function SpecialHop(inputValue)
-    local dataTable, dataTable2, localState, localState2, localState3, localState4, localState5
-    if getgenv().Key and (#getgenv().Key) == 32 then
-        return
-    end
+    local dataTable, dataTable2, localState, localState2, localState3
     if localState9 and (tick() - localState9) < 5 then
         return
     end
@@ -8512,24 +8284,17 @@ function SpecialHop(inputValue)
     end
     Servers = game:GetService("HttpService"):JSONDecode(dataTable2)
     for entryKey, entryValue in next, Servers.data do
-        if (not entryValue) or ((entryValue.name ~= inputValue)) then continue end
+        if (not entryValue) or (entryValue.name ~= inputValue) then continue end
         table.insert(dataTable, entryKey)
     end
     localState9 = tick()
     if 0 < (#dataTable) then
         dataTable2 = {}
         for entryKey, entryValue in next, Servers.data do
-            if (not entryValue) or ((entryValue.name ~= inputValue)) then continue end
+            if (not entryValue) or (entryValue.name ~= inputValue) then continue end
             localState = entryValue.jobid
             localState2 = entryValue.Players
             localState3 = entryValue.placeid
-            localState4, localState5 = loadBananaCatCipher()
-            localState = (function()
-                if string.find(localState, "BananaCat") then
-                    return localState5(localState)
-                end
-                return localState
-            end)()
             if localState and localState ~= game.JobId and not table.find(dataTable2, localState) and not CheckIsplayingRaid() and not Settings[localState] and ((localState2 and localState2 < game.Players.MaxPlayers) or not entryValue.Players) and ((localState3 and game.PlaceId == localState3) or not localState3) then
                 table.insert(dataTable2, localState)
                 game:GetService("ReplicatedStorage").__ServerBrowser:InvokeServer("teleport", tostring(localState))
@@ -26202,9 +25967,6 @@ spawn(function()
                 localState3 = helperFunc()
                 if localState3 then
                     localState4 = "repeat task.wait() until game:IsLoaded() and game.Players.LocalPlayer\n" .. string.format("local ok, cfg = pcall(function() return game:GetService(\"HttpService\"):JSONDecode(readfile(%q)) end)\n", (FolderName .. "/" .. SaveFileName)) .. "if ok and type(cfg) == \"table\" and cfg[\"Auto Load Script\"] == false then return end\n"
-                    if getgenv().Key then
-                        localState4 = localState4 .. string.format("getgenv().Key = %q\n", getgenv().Key)
-                    end
                     localState((localState4 .. localState3))
                     isStateActive = true
                     print("[AutoLoad] đã queue script cho lần hop / rejoin tiếp theo")
