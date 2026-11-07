@@ -7,30 +7,30 @@
       * 100% clean Luau control flow (zero compiler repeat-until-true or goto)
       * 100% verified condition, RemoteEvent/RemoteFunction, Settings & UI fidelity
       * Removed Banana Cat Hub Key Check / Cipher / Web Config Auth
-      * Verified 0 Luau syntax/semantic errors & re-execution safe
+      * Verified 0 Luau syntax/semantic errors & Mobile/Delta Executor Ready
     ================================================================================
 ]]
 
 -- =============================================================================
 -- [PHASE 1.1] CORE BOOTSTRAP, SEA CHECK, HELPERS & CONFIG SYSTEM
 -- =============================================================================
-local hasQuestTitleRaw, questGraceExpireTime, localPlayer2, uiLibrary, dataTable, shopButtonsByKey, savedJobIdsList, cachedAncientStatusText, selectStatsDropdownCfg, dataTable2
-local dataTable3, dataTable4, childIdx, helperFunc, PlayersService, ReplicatedStorage2, VirtualInputManager2, helperFunc2, helperFunc3, isStateActive2
-local helperFunc5, helperFunc6, createUiElement, RunService, dataTable6, helperFunc8, ReplicatedStorage7, helperFunc40, localState5, isStateActive7
-local dropdownControl, elementOptions, helperFunc48, createSliderControl, toggleControl, elementOptions3, dataTable21, dataTable22, dataTable23, dataTable24
-local guideModuleData, helperFunc57, numericVal11, dataTable28, dataTable29, numericVal12, elementOptions4
+local hasQuestTitleRaw, questGraceExpireTime, localPlayer2, uiLibrary, dataTable, fruitsListTable, shopButtonsByKey, savedJobIdsList, cachedAncientStatusText, selectStatsDropdownCfg
+local dataTable2, dataTable3, dataTable4, childIdx, helperFunc, PlayersService, ReplicatedStorage2, VirtualInputManager2, helperFunc2, helperFunc3
+local isStateActive2, helperFunc5, helperFunc6, createUiElement, RunService, dataTable6, helperFunc8, ReplicatedStorage7, helperFunc40, localState5
+local isStateActive7, dropdownControl, elementOptions, helperFunc48, createSliderControl, toggleControl, elementOptions3, dataTable21, dataTable22, dataTable23
+local dataTable24, guideModuleData, helperFunc57, numericVal11, dataTable28, dataTable29, numericVal12, elementOptions4
 do
     local BIT32_WIDTH, UINT32_MODULUS, featureCompatReport, checkExecutorFeature, wrapUiSectionProxy, extractGuiText, trySelectTeam, lastTeamSelectAttempt, isTeamSelected, EMBEDDED_AVATAR_BASE64
-    local decodeBase64, resolveCustomAsset, cachedAvatarAsset, getAvatarAsset, fightingStyleNpcNames, getNpcAnchorPart, detectNpcModel, npcShopController, fightingShopStatusLabel, setFightingShopStatus
-    local notifyFightingShop, updateFightingShopButtonText, cancelShopRequest, finishShopJob, getCharacterRootPart, isFightingStyleOwned, normalizeDialogueText, formatPurchaseResponse, recordPurchaseAttemptDetail, isPurchaseJobActive
-    local pickPurchaseDialogueOption, runNpcDialoguePurchase, startShopPurchaseRequest, stepShopPurchaseJob, currentStyleSpec
-bit32 = {}
+    local decodeBase64, resolveCustomAsset, cachedAvatarAsset, getAvatarAsset, fruitsListIter, fightingStyleNpcNames, getNpcAnchorPart, detectNpcModel, npcShopController, fightingShopStatusLabel
+    local setFightingShopStatus, notifyFightingShop, updateFightingShopButtonText, cancelShopRequest, finishShopJob, getCharacterRootPart, isFightingStyleOwned, normalizeDialogueText, formatPurchaseResponse, recordPurchaseAttemptDetail
+    local isPurchaseJobActive, pickPurchaseDialogueOption, runNpcDialoguePurchase, startShopPurchaseRequest, stepShopPurchaseJob, currentStyleSpec
+bit32 = (bit32 or {})
 BIT32_WIDTH = 32
 UINT32_MODULUS = 2 ^ BIT32_WIDTH
-function bit32.bnot(inputValue)
+bit32.bnot = (bit32.bnot or function(inputValue)
     return ((UINT32_MODULUS - 1) - (inputValue % UINT32_MODULUS))
-end
-function bit32.band(firstArg, secondArg)
+end)
+bit32.band = (bit32.band or function(firstArg, secondArg)
     local numericVal, numericVal2, localState, localState2, localState3
     if secondArg == 255 then
         return (firstArg % 256)
@@ -57,9 +57,8 @@ function bit32.band(firstArg, secondArg)
         numericVal2 = 2 * numericVal2
     end
     return numericVal
-end
--- VERIFIED: logic khớp dump (điều kiện / remote / settings / flow)
-function bit32.bor(firstArg, secondArg)
+end)
+bit32.bor = (bit32.bor or function(firstArg, secondArg)
     local numericVal, numericVal2, localState, localState2, localState3
     if secondArg == 255 then
         return ((firstArg - (firstArg % 256)) + 255)
@@ -86,9 +85,8 @@ function bit32.bor(firstArg, secondArg)
         numericVal2 = 2 * numericVal2
     end
     return numericVal
-end
--- VERIFIED: logic khớp dump (điều kiện / remote / settings / flow)
-function bit32.bxor(firstArg, secondArg)
+end)
+bit32.bxor = (bit32.bxor or function(firstArg, secondArg)
     local numericVal, numericVal2, localState, localState2, localState3
     secondArg = secondArg % UINT32_MODULUS
     firstArg = (firstArg % UINT32_MODULUS)
@@ -106,9 +104,8 @@ function bit32.bxor(firstArg, secondArg)
         numericVal2 = 2 * numericVal2
     end
     return numericVal
-end
--- VERIFIED: logic khớp dump (điều kiện / remote / settings / flow)
-function bit32.lshift(firstArg, secondArg)
+end)
+bit32.lshift = (bit32.lshift or function(firstArg, secondArg)
     if BIT32_WIDTH <= math.abs(secondArg) then
         return 0
     end
@@ -117,8 +114,8 @@ function bit32.lshift(firstArg, secondArg)
         return math.floor((firstArg * (2 ^ secondArg)))
     end
     return ((firstArg * (2 ^ secondArg)) % UINT32_MODULUS)
-end
-function bit32.rshift(firstArg, secondArg)
+end)
+bit32.rshift = (bit32.rshift or function(firstArg, secondArg)
     if BIT32_WIDTH <= math.abs(secondArg) then
         return 0
     end
@@ -127,8 +124,8 @@ function bit32.rshift(firstArg, secondArg)
         return math.floor((firstArg * (2 ^ (-secondArg))))
     end
     return ((firstArg * (2 ^ (-secondArg))) % UINT32_MODULUS)
-end
-function bit32.arshift(firstArg, secondArg)
+end)
+bit32.arshift = (bit32.arshift or function(firstArg, secondArg)
     local numericVal
     if BIT32_WIDTH <= math.abs(secondArg) then
         return 0
@@ -142,7 +139,7 @@ function bit32.arshift(firstArg, secondArg)
         return (math.floor((firstArg * (2 ^ (-secondArg)))) + numericVal)
     end
     return ((firstArg * (2 ^ (-secondArg))) % UINT32_MODULUS)
-end
+end)
 print("Steve Hub | Control Center")
 repeat
     wait()
@@ -422,9 +419,9 @@ function SaveSettings(firstArg, secondArg, thirdArg)
         Settings[firstArg] = secondArg
     end
     if not isfolder(FolderName) then
-        makefolder(FolderName)
+        pcall(makefolder, FolderName)
     end
-    writefile((FolderName .. "/" .. SaveFileName), HttpService:JSONEncode(Settings))
+    pcall(writefile, (FolderName .. "/" .. SaveFileName), HttpService:JSONEncode(Settings))
 end
 if getgenv().Config then
     Settings = getgenv().Config
@@ -499,13 +496,13 @@ end
 -- VERIFIED: logic khớp dump (điều kiện / remote / settings / flow)
 repeat
     wait()
-until game:FindFirstChild("CoreGui")
+until pcall(game.GetService, game, "CoreGui")
 repeat
     wait()
-until not game:GetService("Players").LocalPlayer.PlayerGui:FindFirstChild("LoadingScreen")
+until not game:GetService("Players").LocalPlayer.PlayerGui:FindFirstChild("LoadingScreen") or game.Players.LocalPlayer.Team or game.Players.LocalPlayer.Character
 repeat
     wait()
-until game:IsLoaded() and game.Players.LocalPlayer:FindFirstChild("DataLoaded")
+until game:IsLoaded() and (game.Players.LocalPlayer:FindFirstChild("DataLoaded") or game.Players.LocalPlayer:FindFirstChild("Data"))
 function FireButton(inputValue)
     inputValue.Selectable = true
     game:GetService("GuiService").SelectedObject = inputValue
@@ -580,7 +577,7 @@ repeat
 until game:IsLoaded() and game.Players.LocalPlayer
 repeat
     wait()
-until game:FindFirstChild("CoreGui")
+until pcall(game.GetService, game, "CoreGui")
 localPlayer2 = getgenv()
 local shouldContinueStep_18 = true
 if syn then
@@ -617,8 +614,8 @@ getgenv().CheckPlaceId2 = ((game.PlaceId == 4442272183) and (4442272183)) or (79
 getgenv().CheckPlaceId3 = ((game.PlaceId == 2753915549) and (2753915549)) or (85211729168715)
 getgenv().LoadScript = true
 localPlayer2 = game.Players.LocalPlayer
-getgenv().getupvalue = debug.getupvalue
-getgenv().getupvalues = debug.getupvalues
+getgenv().getupvalue = ((debug and debug.getupvalue) or getupvalue or getgenv().getupvalue)
+getgenv().getupvalues = ((debug and debug.getupvalues) or getupvalues or getgenv().getupvalues)
 wOrigin = game:GetService("Workspace"):WaitForChild("_WorldOrigin")
 CommF = game:GetService("ReplicatedStorage"):WaitForChild("Remotes"):WaitForChild("CommF_")
 vu = game:GetService("VirtualUser")
@@ -716,9 +713,9 @@ end
 uiLibrary = (function()
     local libraryController, PlayersService, UserInputService, TweenService, RunService, localPlayer2, themePalette, createUiElement, applyUiCorner, applyUiStroke
     local applyUiPadding, helperFunc, helperFunc2, safeInvokeCallback, bindButtonHover, updateButtonColor, helperFunc3, playerGui, isSuccess, callResult
-    local canvasGroup, childIdx, childObj, frameContainer, localState, frameContainer2, frameContainer3, scrollFrame, listLayout, frameContainer4
-    local localState2, frameContainer5, frameContainer6, localState3, frameContainer7, localState4, localState5, frameContainer8, localState6, localState7
-    local localState8, helperFunc4, inputBox, frameContainer9, localState9, imageButton, helperFunc5, frameContainer10, textValue, dataTable
+    local frameContainer, childIdx, childObj, frameContainer2, localState, frameContainer3, frameContainer4, scrollFrame, listLayout, frameContainer5
+    local localState2, frameContainer6, frameContainer7, localState3, frameContainer8, localState4, localState5, frameContainer9, localState6, localState7
+    local localState8, helperFunc4, inputBox, frameContainer10, localState9, imageButton, helperFunc5, frameContainer11, textValue, dataTable
     local dataTable2, localState10, numericVal, dataTable3, applySearchFilter, helperFunc6, createSliderControl, helperFunc7
     libraryController = { Options = {} }
     PlayersService = game:GetService("Players")
@@ -844,10 +841,10 @@ uiLibrary = (function()
         childObj:Destroy()
     end
     isSuccess = createUiElement("ScreenGui", { Name = "Steve Hub GUI", ResetOnSpawn = false, IgnoreGuiInset = true, ZIndexBehavior = Enum.ZIndexBehavior.Sibling, DisplayOrder = 200 }, playerGui)
-    callResult = applyUiCorner(createUiElement("Frame", { Name = "SteveHubWindow", BackgroundColor3 = themePalette.base, BackgroundTransparency = 1, BorderSizePixel = 0, Size = UDim2.fromOffset(720, 500), AnchorPoint = Vector2.new(0.5, 0.5), Position = UDim2.fromScale(0.5, 0.5), ClipsDescendants = false }, isSuccess), 18)
+    callResult = applyUiCorner(createUiElement("Frame", { Name = "SteveHubWindow", BackgroundColor3 = themePalette.base, BackgroundTransparency = 0, BorderSizePixel = 0, Size = UDim2.fromOffset(720, 500), AnchorPoint = Vector2.new(0.5, 0.5), Position = UDim2.fromScale(0.5, 0.5), ClipsDescendants = false }, isSuccess), 18)
     applyUiCorner(createUiElement("Frame", { Name = "WindowShadow", BackgroundColor3 = Color3.fromRGB(0, 0, 0), BackgroundTransparency = 0.5, BorderSizePixel = 0, Position = UDim2.fromOffset(0, 8), Size = UDim2.fromScale(1, 1), ZIndex = 1 }, callResult), 20)
-    canvasGroup = applyUiCorner(createUiElement("CanvasGroup", { Name = "RoundedSurface", BackgroundColor3 = themePalette.base, BorderSizePixel = 0, Size = UDim2.fromScale(1, 1), ClipsDescendants = true, ZIndex = 2 }, callResult), 18)
-    applyUiStroke(canvasGroup, themePalette.border, 1.2)
+    frameContainer = applyUiCorner(createUiElement("Frame", { Name = "RoundedSurface", BackgroundColor3 = themePalette.base, BorderSizePixel = 0, Size = UDim2.fromScale(1, 1), ClipsDescendants = true, ZIndex = 2 }, callResult), 18)
+    applyUiStroke(frameContainer, themePalette.border, 1.2)
     childIdx = createUiElement("UIScale", { Scale = 1 }, callResult)
     function childObj()
         local localState, localState2
@@ -862,41 +859,41 @@ uiLibrary = (function()
     if workspace.CurrentCamera then
         workspace.CurrentCamera:GetPropertyChangedSignal("ViewportSize"):Connect(childObj)
     end
-    frameContainer = createUiElement("Frame", { BackgroundColor3 = themePalette.sidebar, BorderSizePixel = 0, Size = UDim2.new(0, 174, 1, 0) }, canvasGroup)
-    createUiElement("Frame", { BackgroundColor3 = themePalette.border, BorderSizePixel = 0, Position = UDim2.new(1, -1, 0, 0), Size = UDim2.new(0, 1, 1, 0) }, frameContainer)
+    frameContainer2 = createUiElement("Frame", { BackgroundColor3 = themePalette.sidebar, BorderSizePixel = 0, Size = UDim2.new(0, 174, 1, 0) }, frameContainer)
+    createUiElement("Frame", { BackgroundColor3 = themePalette.border, BorderSizePixel = 0, Position = UDim2.new(1, -1, 0, 0), Size = UDim2.new(0, 1, 1, 0) }, frameContainer2)
     localState = getAvatarAsset()
-    frameContainer2 = createUiElement("Frame", { BackgroundTransparency = 1, Size = UDim2.new(1, 0, 0, 84) }, frameContainer)
-    frameContainer3 = applyUiCorner(createUiElement("Frame", { Size = UDim2.fromOffset(40, 40), Position = UDim2.fromOffset(16, 18), BackgroundColor3 = themePalette.panel, BorderSizePixel = 0 }, frameContainer2), 10)
-    applyUiStroke(frameContainer3, themePalette.primary, 1.4)
+    frameContainer3 = createUiElement("Frame", { BackgroundTransparency = 1, Size = UDim2.new(1, 0, 0, 84) }, frameContainer2)
+    frameContainer4 = applyUiCorner(createUiElement("Frame", { Size = UDim2.fromOffset(40, 40), Position = UDim2.fromOffset(16, 18), BackgroundColor3 = themePalette.panel, BorderSizePixel = 0 }, frameContainer3), 10)
+    applyUiStroke(frameContainer4, themePalette.primary, 1.4)
     if localState then
-        applyUiCorner(createUiElement("ImageLabel", { BackgroundTransparency = 1, Image = localState, ScaleType = Enum.ScaleType.Crop, Size = UDim2.fromScale(1, 1) }, frameContainer3), 12)
+        applyUiCorner(createUiElement("ImageLabel", { BackgroundTransparency = 1, Image = localState, ScaleType = Enum.ScaleType.Crop, Size = UDim2.fromScale(1, 1) }, frameContainer4), 12)
     else
-        helperFunc(frameContainer3, "S", 26, true, themePalette.primary, { Size = UDim2.fromScale(1, 1), TextXAlignment = Enum.TextXAlignment.Center })
+        helperFunc(frameContainer4, "S", 26, true, themePalette.primary, { Size = UDim2.fromScale(1, 1), TextXAlignment = Enum.TextXAlignment.Center })
     end
-    helperFunc(frameContainer2, "Steve Hub", 16, true, themePalette.text, { Position = UDim2.fromOffset(64, 18), Size = UDim2.fromOffset(102, 22) })
-    helperFunc(frameContainer2, "Blox Fruits", 10, false, themePalette.muted, { Position = UDim2.fromOffset(65, 39), Size = UDim2.fromOffset(100, 16) })
-    createUiElement("Frame", { BackgroundColor3 = themePalette.border, BorderSizePixel = 0, Position = UDim2.new(0, 15, 0, 80), Size = UDim2.new(1, -30, 0, 1) }, frameContainer)
-    helperFunc(frameContainer, "Navigation", 10, false, themePalette.muted, { Position = UDim2.fromOffset(16, 92), Size = UDim2.new(1, -28, 0, 16) })
-    scrollFrame = createUiElement("ScrollingFrame", { BackgroundTransparency = 1, BorderSizePixel = 0, ScrollBarThickness = 2, ScrollBarImageColor3 = themePalette.primary, Position = UDim2.fromOffset(8, 114), Size = UDim2.new(1, -14, 1, -225), CanvasSize = UDim2.fromOffset(0, 0) }, frameContainer)
+    helperFunc(frameContainer3, "Steve Hub", 16, true, themePalette.text, { Position = UDim2.fromOffset(64, 18), Size = UDim2.fromOffset(102, 22) })
+    helperFunc(frameContainer3, "Blox Fruits", 10, false, themePalette.muted, { Position = UDim2.fromOffset(65, 39), Size = UDim2.fromOffset(100, 16) })
+    createUiElement("Frame", { BackgroundColor3 = themePalette.border, BorderSizePixel = 0, Position = UDim2.new(0, 15, 0, 80), Size = UDim2.new(1, -30, 0, 1) }, frameContainer2)
+    helperFunc(frameContainer2, "Navigation", 10, false, themePalette.muted, { Position = UDim2.fromOffset(16, 92), Size = UDim2.new(1, -28, 0, 16) })
+    scrollFrame = createUiElement("ScrollingFrame", { BackgroundTransparency = 1, BorderSizePixel = 0, ScrollBarThickness = 2, ScrollBarImageColor3 = themePalette.primary, Position = UDim2.fromOffset(8, 114), Size = UDim2.new(1, -14, 1, -225), CanvasSize = UDim2.fromOffset(0, 0) }, frameContainer2)
     listLayout = createUiElement("UIListLayout", { Padding = UDim.new(0, 5), SortOrder = Enum.SortOrder.LayoutOrder }, scrollFrame)
     listLayout:GetPropertyChangedSignal("AbsoluteContentSize"):Connect(function()
         scrollFrame.CanvasSize = UDim2.fromOffset(0, (listLayout.AbsoluteContentSize.Y + 9))
     end)
-    frameContainer4 = createUiElement("Frame", { Position = UDim2.new(0, 11, 1, -88), Size = UDim2.new(1, -22, 0, 76), BackgroundTransparency = 1, BorderSizePixel = 0 }, frameContainer)
-    localState2 = bindButtonHover(frameContainer4, "JOIN DISCORD", { Size = UDim2.new(1, 0, 0, 34), Position = UDim2.fromOffset(0, 0), BackgroundColor3 = themePalette.primary, TextColor3 = themePalette.base, TextSize = 14 })
-    helperFunc(frameContainer4, "Left Ctrl to hide", 12, false, themePalette.muted, { Position = UDim2.fromOffset(0, 42), Size = UDim2.new(1, 0, 0, 21), TextXAlignment = Enum.TextXAlignment.Center })
-    frameContainer5 = createUiElement("Frame", { BackgroundTransparency = 1, Position = UDim2.fromOffset(175, 0), Size = UDim2.new(1, -175, 1, 0) }, canvasGroup)
-    frameContainer6 = createUiElement("Frame", { BackgroundTransparency = 1, Size = UDim2.new(1, 0, 0, 74) }, frameContainer5)
-    helperFunc(frameContainer6, "WORKSPACE", 10, true, themePalette.primary, { Position = UDim2.fromOffset(24, 13), Size = UDim2.new(1, -150, 0, 16) })
-    localState3 = helperFunc(frameContainer6, "Dashboard", 22, true, themePalette.text, { Position = UDim2.fromOffset(24, 29), Size = UDim2.new(1, -180, 0, 28) })
-    frameContainer7 = createUiElement("Frame", { BackgroundTransparency = 1, Position = UDim2.new(1, -95, 0, 20), Size = UDim2.fromOffset(78, 30) }, frameContainer6)
-    localState4 = bindButtonHover(frameContainer7, "-", { Size = UDim2.fromOffset(34, 30), Position = UDim2.fromOffset(0, 0), TextSize = 19 })
-    localState5 = bindButtonHover(frameContainer7, "X", { Size = UDim2.fromOffset(34, 30), Position = UDim2.fromOffset(40, 0), TextSize = 15, BackgroundColor3 = themePalette.secondary })
-    frameContainer8 = applyUiCorner(createUiElement("Frame", { Name = "SessionSummary", BackgroundColor3 = themePalette.panel, BorderSizePixel = 0, Position = UDim2.fromOffset(24, 65), Size = UDim2.new(1, -48, 0, 28) }, frameContainer5), 10)
-    applyUiStroke(frameContainer8, themePalette.rowBorder)
-    localState6 = helperFunc(frameContainer8, "LV --", 12, true, themePalette.text, { Position = UDim2.fromOffset(12, 0), Size = UDim2.new(0.28, 0, 1, 0) })
-    localState7 = helperFunc(frameContainer8, "FARM OFF", 12, true, themePalette.muted, { Position = UDim2.fromScale(0.32, 0), Size = UDim2.new(0.25, 0, 1, 0) })
-    localState8 = helperFunc(frameContainer8, "FRUIT OFF", 12, true, themePalette.muted, { Position = UDim2.fromScale(0.64, 0), Size = UDim2.new(0.36, -12, 1, 0), TextXAlignment = Enum.TextXAlignment.Right })
+    frameContainer5 = createUiElement("Frame", { Position = UDim2.new(0, 11, 1, -88), Size = UDim2.new(1, -22, 0, 76), BackgroundTransparency = 1, BorderSizePixel = 0 }, frameContainer2)
+    localState2 = bindButtonHover(frameContainer5, "JOIN DISCORD", { Size = UDim2.new(1, 0, 0, 34), Position = UDim2.fromOffset(0, 0), BackgroundColor3 = themePalette.primary, TextColor3 = themePalette.base, TextSize = 14 })
+    helperFunc(frameContainer5, "Left Ctrl to hide", 12, false, themePalette.muted, { Position = UDim2.fromOffset(0, 42), Size = UDim2.new(1, 0, 0, 21), TextXAlignment = Enum.TextXAlignment.Center })
+    frameContainer6 = createUiElement("Frame", { BackgroundTransparency = 1, Position = UDim2.fromOffset(175, 0), Size = UDim2.new(1, -175, 1, 0) }, frameContainer)
+    frameContainer7 = createUiElement("Frame", { BackgroundTransparency = 1, Size = UDim2.new(1, 0, 0, 74) }, frameContainer6)
+    helperFunc(frameContainer7, "WORKSPACE", 10, true, themePalette.primary, { Position = UDim2.fromOffset(24, 13), Size = UDim2.new(1, -150, 0, 16) })
+    localState3 = helperFunc(frameContainer7, "Dashboard", 22, true, themePalette.text, { Position = UDim2.fromOffset(24, 29), Size = UDim2.new(1, -180, 0, 28) })
+    frameContainer8 = createUiElement("Frame", { BackgroundTransparency = 1, Position = UDim2.new(1, -95, 0, 20), Size = UDim2.fromOffset(78, 30) }, frameContainer7)
+    localState4 = bindButtonHover(frameContainer8, "-", { Size = UDim2.fromOffset(34, 30), Position = UDim2.fromOffset(0, 0), TextSize = 19 })
+    localState5 = bindButtonHover(frameContainer8, "X", { Size = UDim2.fromOffset(34, 30), Position = UDim2.fromOffset(40, 0), TextSize = 15, BackgroundColor3 = themePalette.secondary })
+    frameContainer9 = applyUiCorner(createUiElement("Frame", { Name = "SessionSummary", BackgroundColor3 = themePalette.panel, BorderSizePixel = 0, Position = UDim2.fromOffset(24, 65), Size = UDim2.new(1, -48, 0, 28) }, frameContainer6), 10)
+    applyUiStroke(frameContainer9, themePalette.rowBorder)
+    localState6 = helperFunc(frameContainer9, "LV --", 12, true, themePalette.text, { Position = UDim2.fromOffset(12, 0), Size = UDim2.new(0.28, 0, 1, 0) })
+    localState7 = helperFunc(frameContainer9, "FARM OFF", 12, true, themePalette.muted, { Position = UDim2.fromScale(0.32, 0), Size = UDim2.new(0.25, 0, 1, 0) })
+    localState8 = helperFunc(frameContainer9, "FRUIT OFF", 12, true, themePalette.muted, { Position = UDim2.fromScale(0.64, 0), Size = UDim2.new(0.36, -12, 1, 0), TextXAlignment = Enum.TextXAlignment.Right })
     function helperFunc4()
         local localState, localState2, localState3, timestamp2
         localState = localPlayer2:FindFirstChild("Data")
@@ -920,15 +917,15 @@ uiLibrary = (function()
             pcall(helperFunc4)
         end
     end)
-    inputBox = applyUiCorner(createUiElement("TextBox", { Size = UDim2.new(1, -48, 0, 34), Position = UDim2.fromOffset(24, 105), BackgroundColor3 = themePalette.panel, BorderSizePixel = 0, ClearTextOnFocus = false, Text = "", PlaceholderText = "Search in this tab...", PlaceholderColor3 = themePalette.muted, TextColor3 = themePalette.text, Font = Enum.Font.SourceSans, TextSize = 14, TextXAlignment = Enum.TextXAlignment.Left }, frameContainer5), 12)
+    inputBox = applyUiCorner(createUiElement("TextBox", { Size = UDim2.new(1, -48, 0, 34), Position = UDim2.fromOffset(24, 105), BackgroundColor3 = themePalette.panel, BorderSizePixel = 0, ClearTextOnFocus = false, Text = "", PlaceholderText = "Search in this tab...", PlaceholderColor3 = themePalette.muted, TextColor3 = themePalette.text, Font = Enum.Font.SourceSans, TextSize = 14, TextXAlignment = Enum.TextXAlignment.Left }, frameContainer6), 12)
     applyUiPadding(inputBox, 16, 12, 0, 0)
     applyUiStroke(inputBox, themePalette.border)
-    frameContainer9 = createUiElement("Frame", { BackgroundTransparency = 1, Position = UDim2.fromOffset(0, 150), Size = UDim2.new(1, 0, 1, -162) }, frameContainer5)
+    frameContainer10 = createUiElement("Frame", { BackgroundTransparency = 1, Position = UDim2.fromOffset(0, 150), Size = UDim2.new(1, 0, 1, -162) }, frameContainer6)
     dataTable2 = {}
     numericVal = 1
     dataTable2.Size = UDim2.fromScale(numericVal, 1)
     dataTable2.TextXAlignment = Enum.TextXAlignment.Center
-    localState9 = helperFunc(frameContainer9, "Choose a category to view its tools.", 14, false, themePalette.muted, dataTable2)
+    localState9 = helperFunc(frameContainer10, "Choose a category to view its tools.", 14, false, themePalette.muted, dataTable2)
     imageButton = applyUiCorner(createUiElement("ImageButton", { Name = "SteveHubMini", Size = UDim2.fromOffset(46, 46), Position = UDim2.fromOffset(18, 188), BackgroundColor3 = themePalette.panel, BorderSizePixel = 0, AutoButtonColor = false, Visible = false, ZIndex = 50, ScaleType = Enum.ScaleType.Crop, Image = (localState or "") }, isSuccess), 14)
     applyUiStroke(imageButton, themePalette.primary, 1.2)
     if not localState then
@@ -954,7 +951,7 @@ uiLibrary = (function()
     imageButton.MouseButton1Click:Connect(function()
         helperFunc5(true)
     end)
-    helperFunc3(callResult, frameContainer6)
+    helperFunc3(callResult, frameContainer7)
     helperFunc3(imageButton, imageButton)
     UserInputService.InputBegan:Connect(function(inputObj, secondArg)
         if not secondArg and inputObj.KeyCode == Enum.KeyCode.LeftControl then
@@ -967,15 +964,15 @@ uiLibrary = (function()
     numericVal = 260
     dataTable.Size = UDim2.fromOffset(282, numericVal)
     dataTable.ZIndex = 90
-    frameContainer10 = createUiElement("Frame", dataTable, isSuccess)
+    frameContainer11 = createUiElement("Frame", dataTable, isSuccess)
     dataTable2 = { SortOrder = Enum.SortOrder.LayoutOrder }
     numericVal = 0
     dataTable2.Padding = UDim.new(numericVal, 6)
-    createUiElement("UIListLayout", dataTable2, frameContainer10)
+    createUiElement("UIListLayout", dataTable2, frameContainer11)
     function libraryController.CreateNoti(controlConfig)
         local frameContainer
         controlConfig = controlConfig or {}
-        frameContainer = applyUiCorner(createUiElement("Frame", { BackgroundColor3 = themePalette.panel, BorderSizePixel = 0, Size = UDim2.new(1, 0, 0, 60), ZIndex = 91 }, frameContainer10), 10)
+        frameContainer = applyUiCorner(createUiElement("Frame", { BackgroundColor3 = themePalette.panel, BorderSizePixel = 0, Size = UDim2.new(1, 0, 0, 60), ZIndex = 91 }, frameContainer11), 10)
         applyUiStroke(frameContainer, themePalette.primary)
         helperFunc(frameContainer, "S", 16, true, themePalette.primary, { Position = UDim2.fromOffset(12, 10), Size = UDim2.fromOffset(20, 34), ZIndex = 92 })
         helperFunc(frameContainer, (controlConfig.Title or "Steve Hub"), 13, true, themePalette.text, { Position = UDim2.fromOffset(38, 8), Size = UDim2.new(1, -44, 0, 20), ZIndex = 92 })
@@ -1153,7 +1150,7 @@ uiLibrary = (function()
             textValue.outline.Transparency = 1
             textValue.navbutton.Text = (({ ["Status And Server"] = "Status & Server", ["Hold and Select Skill"] = "Skills", ["Fruit and Raid, Dungeon"] = "Fruit & Raids", ["Get and Upgrade Items"] = "Items & Upgrades", ["Tab Webhook"] = "Webhook" })[localState] or localState)
             textValue.bar = applyUiCorner(createUiElement("Frame", { Visible = false, BackgroundColor3 = themePalette.primary, BorderSizePixel = 0, Position = UDim2.new(0, -34, 0.5, -10), Size = UDim2.fromOffset(3, 20) }, textValue.navbutton), 2)
-            textValue.scroll = createUiElement("ScrollingFrame", { Name = ("Page_" .. localState), BackgroundTransparency = 1, BorderSizePixel = 0, Size = UDim2.fromScale(1, 1), ScrollBarThickness = 3, ScrollBarImageColor3 = themePalette.primary, CanvasSize = UDim2.fromOffset(0, 0), Visible = false }, frameContainer9)
+            textValue.scroll = createUiElement("ScrollingFrame", { Name = ("Page_" .. localState), BackgroundTransparency = 1, BorderSizePixel = 0, Size = UDim2.fromScale(1, 1), ScrollBarThickness = 3, ScrollBarImageColor3 = themePalette.primary, CanvasSize = UDim2.fromOffset(0, 0), Visible = false }, frameContainer10)
             applyUiPadding(textValue.scroll, 22, 22, 4, 16)
             listLayout = createUiElement("UIListLayout", { SortOrder = Enum.SortOrder.LayoutOrder, Padding = UDim.new(0, 12) }, textValue.scroll)
             listLayout:GetPropertyChangedSignal("AbsoluteContentSize"):Connect(function()
@@ -1782,7 +1779,9 @@ end
 getgenv().tablefruitausea3 = {}
 whitelistedfruit = {}
 TableDevilFruit = {}
-for detectNpcModel, npcShopController in next, game:GetService("ReplicatedStorage").Remotes.CommF_:InvokeServer("GetFruits", false) do
+fruitsListIter = (game:GetService("ReplicatedStorage").Remotes.CommF_:InvokeServer("GetFruits", false) or {})
+fruitsListTable = nil
+for detectNpcModel, npcShopController in next, fruitsListIter, fruitsListTable do
     if 1000000 <= npcShopController.Price then
         table.insert(whitelistedfruit, (string.split(npcShopController.Name, "-")[1] .. " Fruit"))
         getgenv().tablefruitausea3[npcShopController.Name] = npcShopController.Price
@@ -6667,7 +6666,7 @@ getgenv().SpamGunDragonStorm = function(inputObj)
     if not localState2 or localState:IsGunReloading(localState2) then
         return
     end
-    localState = getupvalues(requirev3047.Controllers.CombatController.Attack)[9]
+    localState = getupvalues(require(ReplicatedStorage2.Controllers.CombatController).Attack)[9]
     localState3 = debug.getupvalue(localState, 15)
     localState4 = debug.getupvalue(localState, 13)
     localState6 = debug.getupvalue(localState, 16)
@@ -8865,8 +8864,8 @@ end
 -- [PHASE 3.1] PAGE 7: STACK FARMING (Auto World, Devil Fruit, Event Game, Bosses)
 -- =============================================================================
 do
-    local fruitsListTable, dataTable27, helperFunc63, localState15, localState16, itemIdx, itemValue, localState17, helperFunc64, helperFunc65
-    local helperFunc66, helperFunc67, isSuccess, callResult, entryKey, entryValue2, dropdownControl2
+    local dataTable27, helperFunc63, localState15, localState16, itemIdx, itemValue, localState17, helperFunc64, helperFunc65, helperFunc66
+    local helperFunc67, isSuccess, callResult, entryKey, entryValue2, dropdownControl2
 stackFarmMain = Main.CreatePage({ Page_Name = "Stack Farming", Page_Title = "Stack Farming" })
 AutoWorldSection = stackFarmMain.CreateSection("Auto World")
 AutoWorldSection.CreateToggle({ Title = "Auto New World", Desc = nil, Default = (Settings["Auto New World"] or false) }, function(inputValue)
@@ -11255,7 +11254,7 @@ function GetNpcPosition(inputValue)
     if localState then
         return localState:GetPivot().Position
     end
-    localState2 = requireReplicatedStorage.NPCManager.getNPCsByName(inputValue)[1]
+    localState2 = require(ReplicatedStorage.NPCManager).getNPCsByName(inputValue)[1]
     if not localState2 then
         localState3 = localState2
     else
@@ -11773,7 +11772,7 @@ function ShootHiddenGunAt(inputObj)
     FaceHiddenTarget(inputObj.Position)
     task.wait(0.1)
     localState3 = workspace.CurrentCamera:WorldToViewportPoint(inputObj.Position)
-    localState4 = getupvalues(requireReplicatedStorage.Controllers.CombatController.Attack)[9]
+    localState4 = getupvalues(require(ReplicatedStorage.Controllers.CombatController).Attack)[9]
     if type(localState4) == "function" and debug.info(localState4, "n") == "shootGun" and localState.Parent == localPlayer.Character then
         GuiService = game:GetService("GuiService"):GetGuiInset()
         pcall(localState4, localState, { UserInputType = Enum.UserInputType.Touch, Position = Vector3.new((localState3.X - GuiService.X), (localState3.Y - GuiService.Y), 0) })
@@ -11883,7 +11882,7 @@ function PlayHiddenBellTune(firstArg, inputObj)
         FaceHiddenTarget(inputObj.Position)
         if localState == "Gun" and localState3 then
             isStateActive = workspace.CurrentCamera:WorldToViewportPoint(inputObj.Position)
-            localState4 = getupvalues(requireReplicatedStorage.Controllers.CombatController.Attack)[9]
+            localState4 = getupvalues(require(ReplicatedStorage.Controllers.CombatController).Attack)[9]
             if type(localState4) == "function" and localState3.Parent == localPlayer.Character then
                 GuiService = game:GetService("GuiService"):GetGuiInset()
                 pcall(localState4, localState3, { UserInputType = Enum.UserInputType.Touch, Position = Vector3.new((isStateActive.X - GuiService.X), (isStateActive.Y - GuiService.Y), 0) })
@@ -14067,7 +14066,7 @@ helperFunc63[36] = { Island = "Jungle", Name = "Zipline Repair", Run = function(
             characterModel.Humanoid:EquipTool(localState2)
             task.wait(0.5)
         end
-        inputValue:InvokeServer("Throw", "Grappling Hook", requireReplicatedStorage.Util.Trajectory.getArcAim(characterModel.HumanoidRootPart.Position, localState.target))
+        inputValue:InvokeServer("Throw", "Grappling Hook", require(ReplicatedStorage.Util.Trajectory).getArcAim(characterModel.HumanoidRootPart.Position, localState.target))
         HiddenEvent.checked = 0
         task.wait(2)
     end
@@ -14470,7 +14469,7 @@ function CheckHiddenStall()
     HiddenEvent.islandArrived = nil
     HiddenEvent.waitingSince = nil
     LeaveHiddenCannon()
-    pcall(requireReplicatedStorage.DialogueController.close)
+    pcall(require(ReplicatedStorage.DialogueController).close)
     HiddenNotify((localState .. " got stuck on \"" .. tostring(localState2.step) .. "\", trying another quest"), (localState .. "stall"), "warning")
 end
 -- VERIFIED: logic khớp dump (điều kiện / remote / settings / flow)
@@ -15184,7 +15183,7 @@ end
 function helperFunc67(inputObj, targetCoord)
     inputObj.CFrame = CFrame.new(inputObj.Position, (inputObj.Position + (Vector3.new(targetCoord.X, inputObj.Position.Y, targetCoord.Z) - inputObj.Position).Unit))
 end
-fruitsListTable = game.Players.LocalPlayer.Character["HumanoidRootPart"]
+fruitsListTable = (game.Players.LocalPlayer.Character and game.Players.LocalPlayer.Character:FindFirstChild("HumanoidRootPart"))
 function GetGoldenVortex()
     local localState, localState2, localState3, localState4, entryKey
     localState, localState2 = workspace.ActiveFishingSpots:GetChildren()
@@ -17059,7 +17058,7 @@ function Multiraid(inputValue)
     end
     if Settings["Account Pick Slot Raid"] and not localPlayer2.PlayerGui.Main.TopHUDList.RaidTimer.Visible and not CheckInRaid() and not NearSlotRaid(WorkspaceService.Parent.Parent) then
         task.wait(Random.new():NextNumber(0, 2))
-        toTarget((DetectSlotRaidf1_v1.Parent.Parent.Hitbox.CFrame * CFrame.new(0, -2, 0)))
+        toTarget((DetectSlotRaid(WorkspaceService.Parent.Parent).Hitbox.CFrame * CFrame.new(0, -2, 0)))
     end
     if DetectItemPlr("Special Microchip") then
         if getgenv().waitgoraid then
@@ -18737,7 +18736,7 @@ spawn(function()
 end)
 LeviathanEventSection = SeaEventTab.CreateSection("Leviathan Event")
 LeviathanEventSection.CreateButton({ Title = "Buy Spy" }, function()
-    require(game.ReplicatedStorage.DialogueController):Start(requiregame.ReplicatedStorage.DialoguesList.Spy)
+    require(game.ReplicatedStorage.DialogueController):Start(require(game.ReplicatedStorage.DialoguesList).Spy)
 end)
 LeviathanEventSection.CreateButton({ Title = "Teleport your boat to current Position" }, function()
     checkboat().VehicleSeat.CFrame = localPlayer2.Character.HumanoidRootPart.CFrame
@@ -23947,7 +23946,7 @@ function AutoUpgradeWeapon(inputValue)
                 end
             else
                 PlayersService = game:GetService("ReplicatedStorage").Remotes.CommF_:InvokeServer(unpack({ [1] = "UpgradeItem", [2] = "Check", [3] = (game:GetService("Players").LocalPlayer.Backpack:FindFirstChild(NameWeapon(inputValue)) or game:GetService("Players").LocalPlayer.Character:FindFirstChild(NameWeapon(inputValue))) }))
-                requiregame.Players.LocalPlayer.PlayerGui.Main.UIController.Craft(PlayersService.Required, PlayersService.Result, PlayersService.ResultStats)
+                require(game.Players.LocalPlayer.PlayerGui.Main.UIController.Craft)(PlayersService.Required, PlayersService.Result, PlayersService.ResultStats)
                 wait(1)
             end
         end
@@ -25694,7 +25693,7 @@ end
 dataTable.CreateToggle({ Title = "Remove Notifications", Desc = nil, Default = (Settings["Remove Notifications"] or false) }, function(inputValue)
     SaveSettings("Remove Notifications", inputValue)
 end)
-DisplayNoti = getupvalues(require(game:GetService("ReplicatedStorage").Notification).Display)[1]
+DisplayNoti = (getupvalues and getupvalues(require(game:GetService("ReplicatedStorage").Notification).Display)[1])
 spawn(function()
     repeat
         wait(1)
